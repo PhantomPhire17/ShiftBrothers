@@ -1,0 +1,517 @@
+<html>
+<head>
+<title>Battle.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #6a8759;}
+.s4 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Battle.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.mygdx.game</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.Gdx</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.ScreenAdapter</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.Color</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.glutils.ShapeRenderer</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.utils.ScreenUtils</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">java.util.ArrayList</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.util.Random</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">Battle </span><span class="s0">extends </span><span class="s1">ScreenAdapter </span><span class="s0">implements </span><span class="s1">Constants{</span>
+
+    <span class="s0">private </span><span class="s1">Main game = </span><span class="s0">new </span><span class="s1">Main()</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Ability harAb</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Ability gusAb</span><span class="s0">;</span>
+    <span class="s0">private boolean </span><span class="s1">gameIsPaused = </span><span class="s0">false;</span>
+
+    <span class="s0">private </span><span class="s1">Animation animaHarald = </span><span class="s0">new </span><span class="s1">Animation()</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Animation animaGustav = </span><span class="s0">new </span><span class="s1">Animation()</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">width = Gdx.graphics.getWidth()</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">height = Gdx.graphics.getHeight()</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">rectWidth = </span><span class="s2">200</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">rectHeight = </span><span class="s2">100</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">btnsX = </span><span class="s2">20</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">btnsY = </span><span class="s2">900</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">ex</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">ey</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">p1x</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">p2x</span><span class="s0">;</span>
+    <span class="s0">public </span><span class="s1">Battle(Main game) {</span>
+        <span class="s0">this</span><span class="s1">.game = game</span><span class="s0">;</span>
+        <span class="s1">setup()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setup() {</span>
+        <span class="s1">widthPerFrameGustav = </span><span class="s2">360</span><span class="s1">/att.getTimer()</span><span class="s0">;</span>
+        <span class="s1">p1x = P1_X</span><span class="s0">;</span>
+        <span class="s1">p2x = P2_X</span><span class="s0">;</span>
+        <span class="s1">harald.setName(</span><span class="s3">&quot;harald&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">gustav.setName(</span><span class="s3">&quot;gustav&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">harald.setDirectionOffset(-</span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">gustav.setDirectionOffset(</span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">setAbilities()</span><span class="s0">;</span>
+        <span class="s1">setButtons()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s1">KLabel atLabel = </span><span class="s0">new </span><span class="s1">KLabel()</span><span class="s0">;</span>
+    <span class="s1">KLabel damageHarald = </span><span class="s0">new </span><span class="s1">KLabel()</span><span class="s0">;</span>
+    <span class="s1">KLabel damageGustav = </span><span class="s0">new </span><span class="s1">KLabel()</span><span class="s0">;</span>
+
+    <span class="s1">ArrayList&lt;Ability&gt; allAbilities = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Ability&gt;()</span><span class="s0">;</span>
+
+    <span class="s0">public void </span><span class="s1">setAbilities() {</span>
+        <span class="s1">allAbilities.add(def)</span><span class="s0">;</span>
+        <span class="s1">allAbilities.add(prt)</span><span class="s0">;</span>
+        <span class="s1">allAbilities.add(slow)</span><span class="s0">;</span>
+        <span class="s1">allAbilities.add(rand)</span><span class="s0">;</span>
+
+        <span class="s1">allAbilities.add(don)</span><span class="s0">;</span>
+        <span class="s1">allAbilities.add(tmp)</span><span class="s0">;</span>
+        <span class="s1">allAbilities.add(att)</span><span class="s0">;</span>
+        <span class="s1">allAbilities.add(def)</span><span class="s0">;</span>
+
+        <span class="s1">allAbilities.add(att)</span><span class="s0">;</span>
+        <span class="s1">allAbilities.add(tmp)</span><span class="s0">;</span>
+        <span class="s1">allAbilities.add(haste)</span><span class="s0">;</span>
+        <span class="s1">allAbilities.add(lock)</span><span class="s0">;</span>
+
+        <span class="s1">allAbilities.add(tmp)</span><span class="s0">;</span>
+        <span class="s1">allAbilities.add(att)</span><span class="s0">;</span>
+        <span class="s1">allAbilities.add(def)</span><span class="s0">;</span>
+        <span class="s1">allAbilities.add(tmp)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s1">ArrayList&lt;Button&gt; btns = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Button&gt;()</span><span class="s0">;</span>
+    <span class="s1">ArrayList&lt;Button&gt; prices = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Button&gt;()</span><span class="s0">;</span>
+
+    <span class="s0">private int </span><span class="s1">btnsNumber = </span><span class="s2">16</span><span class="s0">;</span>
+    <span class="s0">public void </span><span class="s1">setButtons() {</span>
+        <span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i=</span><span class="s2">0</span><span class="s0">; </span><span class="s1">i&lt;btnsNumber</span><span class="s0">; </span><span class="s1">i++) {</span>
+            <span class="s1">btns.add(</span><span class="s0">new </span><span class="s1">Button())</span><span class="s0">;</span>
+            <span class="s1">btns.get(i).setDimensions(btnsX + </span><span class="s2">160</span><span class="s1">*(i/</span><span class="s2">8</span><span class="s1">)</span><span class="s0">, </span><span class="s1">(btnsY - (i%</span><span class="s2">8</span><span class="s1">) * </span><span class="s2">110</span><span class="s1">)</span><span class="s0">,</span><span class="s2">150</span><span class="s0">,</span><span class="s2">100</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">btns.get(i).setAbility(allAbilities.get(i))</span><span class="s0">;</span>
+            <span class="s1">btns.get(i).setLabel(btns.get(i).getAbility().getName())</span><span class="s0">;</span>
+            <span class="s1">btns.get(i).setMouseListeners(ex</span><span class="s0">,</span><span class="s1">ey)</span><span class="s0">;</span>
+            <span class="s1">btns.get(i).setColor(</span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">0</span><span class="s0">,</span><span class="s2">0</span><span class="s0">,</span><span class="s2">0.3f</span><span class="s0">,</span><span class="s2">1</span><span class="s1">))</span><span class="s0">;</span>
+        <span class="s1">}</span>
+        <span class="s1">timedBarHarald = </span><span class="s0">new </span><span class="s1">TimedBar()</span><span class="s0">;</span>
+        <span class="s1">timedBarHarald.setColor(Color.GREEN)</span><span class="s0">;</span>
+        <span class="s1">timedBarGustav = </span><span class="s0">new </span><span class="s1">TimedBar()</span><span class="s0">;</span>
+        <span class="s1">timedBarGustav.setColor(Color.GREEN)</span><span class="s0">;</span>
+        <span class="s1">p1HP = </span><span class="s0">new </span><span class="s1">KLabel()</span><span class="s0">;</span>
+        <span class="s1">p2HP = </span><span class="s0">new </span><span class="s1">KLabel()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">int </span><span class="s1">frame = </span><span class="s2">0</span><span class="s0">;</span>
+    <span class="s0">int </span><span class="s1">seconds</span><span class="s0">;</span>
+    <span class="s1">KLabel timeLabel</span><span class="s0">;</span>
+
+    <span class="s4">//-----------------------------------------</span>
+    <span class="s4">//-----------------------------------------</span>
+    <span class="s4">// -----------------------------------------</span>
+    <span class="s4">//-----------------------------------------</span>
+    <span class="s4">//RENDER</span>
+    <span class="s4">//-----------------------------------------</span>
+    <span class="s4">//-----------------------------------------</span>
+    <span class="s4">// -----------------------------------------</span>
+    <span class="s4">//-----------------------------------------</span>
+
+    <span class="s0">boolean </span><span class="s1">gameOver = </span><span class="s0">false;</span>
+    <span class="s1">String gameOverString</span><span class="s0">;</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">render(</span><span class="s0">float </span><span class="s1">delta) {</span>
+        <span class="s1">glClear()</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(harald.isDead() == </span><span class="s0">false </span><span class="s1">&amp;&amp; gustav.isDead() == </span><span class="s0">false </span><span class="s1">&amp;&amp; gameIsPaused == </span><span class="s0">false</span><span class="s1">) {</span>
+            <span class="s1">runGame()</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s1">gameOver = </span><span class="s0">true;</span>
+            <span class="s0">if </span><span class="s1">(player.isDead) gameOverString = </span><span class="s3">&quot;GAME OVER&quot;</span><span class="s0">;</span>
+            <span class="s0">if </span><span class="s1">(enemy.isDead) gameOverString = </span><span class="s3">&quot;VICTORY&quot;</span><span class="s0">;</span>
+        <span class="s1">}</span>
+        <span class="s1">renderShapes()</span><span class="s0">;</span>
+        <span class="s1">renderBatch()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">glClear() {</span>
+        <span class="s1">ScreenUtils.clear(</span><span class="s2">0</span><span class="s0">, </span><span class="s2">0</span><span class="s0">, </span><span class="s2">0</span><span class="s0">, </span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s4">//2.1 RUN GAME</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s0">private int </span><span class="s1">rint</span><span class="s0">;</span>
+    <span class="s0">private boolean </span><span class="s1">gustavLocked = </span><span class="s0">false;</span>
+    <span class="s0">public void </span><span class="s1">runGame() {</span>
+        <span class="s1">runPlayer()</span><span class="s0">;</span>
+        <span class="s1">rint = rgen.nextInt(</span><span class="s2">0</span><span class="s0">,</span><span class="s2">200</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(rint &gt; </span><span class="s2">195</span><span class="s1">) {</span>
+            <span class="s1">gustavLocked = </span><span class="s0">true;</span>
+            <span class="s1">runEnemy()</span><span class="s0">;</span>
+        <span class="s1">}</span>
+        <span class="s1">revertAnimations()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s4">//2.1.1 RUN HARALD</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s0">public void </span><span class="s1">runPlayer() {</span>
+        <span class="s0">if </span><span class="s1">(buttonIsClicked()==</span><span class="s0">true</span><span class="s1">) {</span>
+            <span class="s0">if </span><span class="s1">(player == harald) {</span>
+                <span class="s1">widthPerFrameHarald = </span><span class="s2">360</span><span class="s1">/att.getTimer()</span><span class="s0">;</span>
+                <span class="s1">harald.setActiveTimer(</span><span class="s0">true</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                <span class="s1">widthPerFrameGustav = </span><span class="s2">360</span><span class="s1">/att.getTimer()</span><span class="s0">;</span>
+                <span class="s1">gustav.setActiveTimer(</span><span class="s0">true</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+        <span class="s0">if </span><span class="s1">(timedBarWidthPlayer &lt;= </span><span class="s2">0</span><span class="s1">) {</span>
+            <span class="s4">//att.run(harald, gustav);</span>
+            <span class="s0">if </span><span class="s1">(player == harald) {</span>
+                <span class="s1">animaGustav = damage</span><span class="s0">;</span>
+                <span class="s1">animaCounterGustav = damage.getTimer()</span><span class="s0">;</span>
+                <span class="s1">gustavLocked = </span><span class="s0">false;</span>
+            <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                <span class="s1">animaHarald = damage</span><span class="s0">;</span>
+                <span class="s1">animaCounterHarald = damage.getTimer()</span><span class="s0">;</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+    <span class="s0">private boolean </span><span class="s1">buttonIsClicked() {</span>
+        <span class="s0">if</span><span class="s1">(Gdx.input.isTouched()) {</span>
+            <span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i=</span><span class="s2">0</span><span class="s0">; </span><span class="s1">i&lt;btnsNumber</span><span class="s0">; </span><span class="s1">i++) {</span>
+                <span class="s0">if</span><span class="s1">(btns.get(i).isButton(Gdx.input.getX()</span><span class="s0">,</span><span class="s1">Gdx.graphics.getHeight() - Gdx.input.getY())) {</span>
+                    <span class="s1">player.setTemporaryAbility(allAbilities.get(i))</span><span class="s0">;</span>
+                    <span class="s0">return true;</span>
+                <span class="s1">}</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+        <span class="s0">return false;</span>
+    <span class="s1">}</span>
+
+    <span class="s4">//2.1.2 RUN GUSTAV</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s1">Random rgen = </span><span class="s0">new </span><span class="s1">Random()</span><span class="s0">;</span>
+    <span class="s0">public void </span><span class="s1">runEnemy() {</span>
+        <span class="s0">if </span><span class="s1">(enemy == gustav) {</span>
+            <span class="s0">if </span><span class="s1">(timedBarWidthGustav == </span><span class="s2">360</span><span class="s1">) {</span>
+                <span class="s1">gustav.setActiveTimer(</span><span class="s0">true</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s1">gustav.setTemporaryAbility(getEnemyAbility())</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s0">if </span><span class="s1">(timedBarWidthGustav &lt;= </span><span class="s2">0</span><span class="s1">) {</span>
+                <span class="s1">att.run(enemy</span><span class="s0">, </span><span class="s1">player)</span><span class="s0">;</span>
+                <span class="s1">animaHarald = damage</span><span class="s0">;</span>
+                <span class="s1">animaCounterHarald = damage.getTimer()</span><span class="s0">;</span>
+                <span class="s1">gustavLocked = </span><span class="s0">false;</span>
+            <span class="s1">}</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s0">if </span><span class="s1">(timedBarWidthHarald == </span><span class="s2">360</span><span class="s1">) {</span>
+                <span class="s1">harald.setActiveTimer(</span><span class="s0">true</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s1">harald.setTemporaryAbility(att)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s0">if </span><span class="s1">(timedBarWidthHarald &lt;= </span><span class="s2">0</span><span class="s1">) {</span>
+                <span class="s1">animaGustav = damage</span><span class="s0">;</span>
+                <span class="s1">animaCounterGustav = damage.getTimer()</span><span class="s0">;</span>
+                <span class="s1">gustavLocked = </span><span class="s0">false;</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public </span><span class="s1">Ability getEnemyAbility() {</span>
+        <span class="s1">n = rgen.nextInt(</span><span class="s2">0</span><span class="s0">,</span><span class="s2">100</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(n &gt; </span><span class="s2">50</span><span class="s1">) </span><span class="s0">return </span><span class="s1">att</span><span class="s0">;</span>
+        <span class="s0">return </span><span class="s1">tmp</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">int </span><span class="s1">n</span><span class="s0">;</span>
+    <span class="s0">public boolean </span><span class="s1">runAbility(</span><span class="s0">int </span><span class="s1">chance) {</span>
+        <span class="s1">n = rgen.nextInt(</span><span class="s2">0</span><span class="s0">,</span><span class="s2">100</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(n &gt; chance) {</span>
+            <span class="s0">return true;</span>
+        <span class="s1">} </span><span class="s0">return false;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">int </span><span class="s1">animaCounterHarald = -</span><span class="s2">1</span><span class="s0">;</span>
+    <span class="s0">int </span><span class="s1">animaCounterGustav = -</span><span class="s2">1</span><span class="s0">;</span>
+    <span class="s0">int </span><span class="s1">damagedCounterHarald = </span><span class="s2">30</span><span class="s0">;</span>
+    <span class="s0">int </span><span class="s1">damagedCounterGustav = </span><span class="s2">30</span><span class="s0">;</span>
+    <span class="s0">public void </span><span class="s1">revertAnimations() {</span>
+        <span class="s1">revertDamageLabels()</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(animaCounterHarald &gt; -</span><span class="s2">1</span><span class="s1">) {</span>
+            <span class="s0">if </span><span class="s1">(animaCounterHarald == </span><span class="s2">0</span><span class="s1">) {</span>
+                <span class="s1">animaHarald = anima</span><span class="s0">;</span>
+            <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                <span class="s1">animaCounterHarald--</span><span class="s0">;</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+        <span class="s0">if </span><span class="s1">(animaCounterGustav &gt; -</span><span class="s2">1</span><span class="s1">) {</span>
+            <span class="s0">if </span><span class="s1">(animaCounterGustav == </span><span class="s2">0</span><span class="s1">) {</span>
+                <span class="s1">animaGustav = anima</span><span class="s0">;</span>
+            <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                <span class="s1">animaCounterGustav--</span><span class="s0">;</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">revertDamageLabels() {</span>
+        <span class="s0">if </span><span class="s1">(harald.isHit() == </span><span class="s0">true</span><span class="s1">) {</span>
+                <span class="s0">if </span><span class="s1">(damagedCounterHarald == </span><span class="s2">0</span><span class="s1">) {</span>
+                    <span class="s1">harald.setHit(</span><span class="s0">false</span><span class="s1">)</span><span class="s0">;</span>
+                    <span class="s1">damagedCounterHarald = </span><span class="s2">30</span><span class="s0">;</span>
+                <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                    <span class="s1">damagedCounterHarald--</span><span class="s0">;</span>
+                <span class="s1">}</span>
+        <span class="s1">}</span>
+        <span class="s0">if </span><span class="s1">(gustav.isHit() == </span><span class="s0">true</span><span class="s1">) {</span>
+            <span class="s0">if </span><span class="s1">(damagedCounterGustav == </span><span class="s2">0</span><span class="s1">) {</span>
+                <span class="s1">gustav.setHit(</span><span class="s0">false</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s1">damagedCounterGustav = </span><span class="s2">30</span><span class="s0">;</span>
+            <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                <span class="s1">damagedCounterGustav--</span><span class="s0">;</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+
+
+    <span class="s4">//2.2 RENDER SHAPES</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s0">private boolean </span><span class="s1">HarTimerIsActive = </span><span class="s0">false;</span>
+    <span class="s0">public void </span><span class="s1">renderShapes() {</span>
+        <span class="s1">game.shape.begin(ShapeRenderer.ShapeType.Filled)</span><span class="s0">;</span>
+        <span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i=</span><span class="s2">0</span><span class="s0">; </span><span class="s1">i&lt;btnsNumber</span><span class="s0">; </span><span class="s1">i++) btns.get(i).draw(game.shape)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(harald.timerIsActive() == </span><span class="s0">true</span><span class="s1">) drawTimedBar(harald.getTempAbility().getTimer()</span><span class="s0">, </span><span class="s1">harald)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(gustav.timerIsActive() == </span><span class="s0">true</span><span class="s1">) drawTimedBar(gustav.getTempAbility().getTimer()</span><span class="s0">, </span><span class="s1">gustav)</span><span class="s0">;</span>
+        <span class="s1">game.shape.end()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s1">Button at</span><span class="s0">;</span>
+
+    <span class="s0">private int </span><span class="s1">timedBarWidthHarald = </span><span class="s2">360</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">timedBarWidthGustav = </span><span class="s2">360</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">gusBarWidth = </span><span class="s2">360</span><span class="s0">;</span>
+
+    <span class="s0">private int </span><span class="s1">gusBarX = P2_X</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">TimedBar timedBarHarald</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">TimedBar timedBarGustav</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">widthPerFrameHarald</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">widthPerFrameGustav</span><span class="s0">;</span>
+    <span class="s0">public void </span><span class="s1">drawTimedBar(</span><span class="s0">int </span><span class="s1">seconds</span><span class="s0">, </span><span class="s1">Fighter fighter) {</span>
+        <span class="s0">if </span><span class="s1">(fighter == harald) {</span>
+            <span class="s1">timedBarHarald.setDimensions(P1_X</span><span class="s0">, </span><span class="s1">P_Y + </span><span class="s2">300</span><span class="s0">, </span><span class="s1">timedBarWidthHarald</span><span class="s0">, </span><span class="s2">30</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">timedBarHarald.draw(game.shape)</span><span class="s0">;</span>
+            <span class="s0">if </span><span class="s1">(timedBarWidthHarald &gt; </span><span class="s2">0</span><span class="s1">) {</span>
+                <span class="s1">timedBarWidthHarald = timedBarWidthHarald - widthPerFrameHarald</span><span class="s0">;</span>
+            <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                <span class="s1">harald.getTempAbility().run(harald</span><span class="s0">,</span><span class="s1">gustav)</span><span class="s0">;</span>
+                <span class="s1">timedBarWidthHarald = </span><span class="s2">360</span><span class="s0">;</span>
+                <span class="s1">fighter.setActiveTimer(</span><span class="s0">false</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s1">timedBarGustav.setDimensions(gusBarX</span><span class="s0">, </span><span class="s1">P_Y + </span><span class="s2">300</span><span class="s0">, </span><span class="s1">timedBarWidthGustav</span><span class="s0">, </span><span class="s2">30</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">timedBarGustav.draw(game.shape)</span><span class="s0">;</span>
+            <span class="s0">if </span><span class="s1">(timedBarWidthGustav &gt; </span><span class="s2">0</span><span class="s1">) {</span>
+                <span class="s1">gusBarX = gusBarX + widthPerFrameGustav</span><span class="s0">;</span>
+                <span class="s1">timedBarWidthGustav = timedBarWidthGustav - widthPerFrameGustav</span><span class="s0">;</span>
+            <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                <span class="s1">gustav.getTempAbility().run(gustav</span><span class="s0">, </span><span class="s1">harald)</span><span class="s0">;</span>
+                <span class="s1">timedBarWidthGustav = </span><span class="s2">360</span><span class="s0">;</span>
+                <span class="s1">gusBarX = P2_X</span><span class="s0">;</span>
+                <span class="s1">fighter.setActiveTimer(</span><span class="s0">false</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+
+    <span class="s1">}</span>
+
+    <span class="s4">//2.1 RENDER TEXTURES AND LABELS</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s0">public void </span><span class="s1">renderBatch() {</span>
+        <span class="s1">game.batch.begin()</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(gameIsPaused == </span><span class="s0">false</span><span class="s1">) drawTimers()</span><span class="s0">;</span>
+        <span class="s1">drawFighters()</span><span class="s0">;</span>
+        <span class="s1">drawLabels()</span><span class="s0">;</span>
+        <span class="s1">game.batch.end()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">int </span><span class="s1">fpsCorrection</span><span class="s0">;</span>
+    <span class="s0">public void </span><span class="s1">drawTimers() {</span>
+        <span class="s1">frame++</span><span class="s0">;</span>
+        <span class="s1">seconds = harald.getSwitchTime() - frame/(</span><span class="s2">30</span><span class="s1">-fpsCorrection)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(gameOver == </span><span class="s0">false</span><span class="s1">) {</span>
+            <span class="s1">timeLabel = </span><span class="s0">new </span><span class="s1">KLabel(</span><span class="s3">&quot;&quot; </span><span class="s1">+ seconds)</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{ timeLabel = </span><span class="s0">new </span><span class="s1">KLabel(gameOverString)</span><span class="s0">; </span><span class="s1">}</span>
+        <span class="s1">timeLabel.drawLabel(</span><span class="s3">&quot;&quot; </span><span class="s1">+ seconds</span><span class="s0">, </span><span class="s1">Gdx.graphics.getWidth()/</span><span class="s2">2</span><span class="s0">, </span><span class="s1">CLOCK_Y</span><span class="s0">, </span><span class="s1">game.batch)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(seconds == -</span><span class="s2">1</span><span class="s1">) {</span>
+            <span class="s1">frame = </span><span class="s2">0</span><span class="s0">;</span>
+            <span class="s1">fpsCorrection++</span><span class="s0">;</span>
+            <span class="s0">if </span><span class="s1">(fpsCorrection == </span><span class="s2">12</span><span class="s1">) fpsCorrection = fpsCorrection + </span><span class="s2">2</span><span class="s0">;</span>
+            <span class="s1">initiateSwitch()</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">drawFighters() {</span>
+        <span class="s0">if </span><span class="s1">(harald.isDead() == </span><span class="s0">false</span><span class="s1">) animaHarald.draw(p1x</span><span class="s0">, </span><span class="s1">P_Y</span><span class="s0">, </span><span class="s1">harald</span><span class="s0">, </span><span class="s1">game.batch)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(gustav.isDead() == </span><span class="s0">false</span><span class="s1">) animaGustav.draw(p2x</span><span class="s0">, </span><span class="s1">P_Y</span><span class="s0">, </span><span class="s1">gustav</span><span class="s0">, </span><span class="s1">game.batch)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">drawLabels() {</span>
+        <span class="s1">drawPlayerStats() </span><span class="s0">;</span>
+        <span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i=</span><span class="s2">0</span><span class="s0">; </span><span class="s1">i&lt;btnsNumber</span><span class="s0">; </span><span class="s1">i++) {</span>
+            <span class="s1">btns.get(i).setPosition(btnsX + </span><span class="s2">190</span><span class="s1">*(i/</span><span class="s2">8</span><span class="s1">)</span><span class="s0">, </span><span class="s1">(btnsY - (i%</span><span class="s2">8</span><span class="s1">) * </span><span class="s2">110</span><span class="s1">))</span><span class="s0">;</span>
+            <span class="s1">btns.get(i).getLabel().drawLabel(btns.get(i).getRectX() + btns.get(i).getRectWidth()/</span><span class="s2">2 </span><span class="s1">- btns.get(i).getLabel().getText().length()*</span><span class="s2">7</span><span class="s0">, </span><span class="s1">btns.get(i).getRectY() - btns.get(i).getRectHeight()/</span><span class="s2">4 </span><span class="s1">- </span><span class="s2">10</span><span class="s0">, </span><span class="s1">game.batch)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+        <span class="s0">if </span><span class="s1">(harald.isHit()==</span><span class="s0">true </span><span class="s1">&amp;&amp; gameOver == </span><span class="s0">false</span><span class="s1">) damageHarald.drawLabel(</span><span class="s3">&quot;&quot;</span><span class="s1">+ harald.getDamageAsString()</span><span class="s0">,</span><span class="s1">p1x+</span><span class="s2">150</span><span class="s0">, </span><span class="s1">P_Y+</span><span class="s2">100</span><span class="s0">, </span><span class="s1">game.batch)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(gustav.isHit()==</span><span class="s0">true </span><span class="s1">&amp;&amp; gameOver == </span><span class="s0">false</span><span class="s1">) damageGustav.drawLabel(</span><span class="s3">&quot;&quot; </span><span class="s1">+ gustav.getDamageAsString()</span><span class="s0">, </span><span class="s1">p2x-</span><span class="s2">50</span><span class="s0">, </span><span class="s1">P_Y+</span><span class="s2">100</span><span class="s0">, </span><span class="s1">game.batch)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(switchCounter &gt; </span><span class="s2">0</span><span class="s1">) {</span>
+            <span class="s1">game.batch.draw(switchTex</span><span class="s0">, </span><span class="s1">Gdx.graphics.getWidth()/</span><span class="s2">2</span><span class="s1">-switchTex.getWidth()/</span><span class="s2">2</span><span class="s0">, </span><span class="s1">CLOCK_Y-</span><span class="s2">100</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">switchCounter--</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s1">gameIsPaused = </span><span class="s0">false;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+    <span class="s1">KLabel p1HP</span><span class="s0">;</span>
+    <span class="s1">KLabel p2HP</span><span class="s0">;</span>
+    <span class="s0">public void </span><span class="s1">drawPlayerStats() {</span>
+        <span class="s1">p1HP.drawLabel(</span><span class="s3">&quot;HP: &quot; </span><span class="s1">+ harald.getHP() + </span><span class="s3">&quot; / &quot; </span><span class="s1">+ harald.getMaxHP() + </span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">&quot; </span><span class="s1">+ </span><span class="s3">&quot;Attack: &quot; </span><span class="s1">+ harald.getAttack() + </span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">Defense: &quot; </span><span class="s1">+ harald.getDefense() + </span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">Speed: &quot; </span><span class="s1">+ harald.getSpeed() + </span><span class="s3">&quot;</span><span class="s0">\n\n</span><span class="s3">Gil: &quot; </span><span class="s1">+ harald.getGil()</span><span class="s0">, </span><span class="s1">P1_X</span><span class="s0">, </span><span class="s1">P_Y-</span><span class="s2">50</span><span class="s0">, </span><span class="s1">game.batch)</span><span class="s0">;</span>
+        <span class="s1">p2HP.drawLabel(</span><span class="s3">&quot;HP: &quot; </span><span class="s1">+ gustav.getHP() + </span><span class="s3">&quot; / &quot; </span><span class="s1">+ gustav.getMaxHP() + </span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">&quot; </span><span class="s1">+ </span><span class="s3">&quot;Attack: &quot; </span><span class="s1">+ gustav.getAttack() + </span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">Defense: &quot; </span><span class="s1">+ gustav.getDefense() + </span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">Speed: &quot; </span><span class="s1">+ gustav.getSpeed() + </span><span class="s3">&quot;</span><span class="s0">\n\n</span><span class="s3">Gil: &quot; </span><span class="s1">+ gustav.getGil()</span><span class="s0">, </span><span class="s1">P2_X</span><span class="s0">, </span><span class="s1">P_Y-</span><span class="s2">50</span><span class="s0">, </span><span class="s1">game.batch)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s4">//-----------------------------------------</span>
+    <span class="s4">//-----------------------------------------</span>
+
+    <span class="s4">//GUSTAV INTELLIGENCE</span>
+
+    <span class="s4">//-----------------------------------------</span>
+    <span class="s4">//-----------------------------------------</span>
+
+
+
+    <span class="s4">//-----------------------------------------</span>
+    <span class="s4">//-----------------------------------------</span>
+
+    <span class="s4">//Mouse Actions</span>
+
+    <span class="s4">//-----------------------------------------</span>
+    <span class="s4">//-----------------------------------------</span>
+
+    <span class="s0">public void </span><span class="s1">checkMouseActions() {}</span>
+    <span class="s0">private </span><span class="s1">Ability curAb</span><span class="s0">;</span>
+
+    <span class="s0">int </span><span class="s1">gusTime=-</span><span class="s2">1</span><span class="s0">;</span>
+    <span class="s0">int </span><span class="s1">harTime=-</span><span class="s2">1</span><span class="s0">;</span>
+
+    <span class="s0">private </span><span class="s1">KLabel gusTimer</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">KLabel harTimer</span><span class="s0">;</span>
+    <span class="s0">private boolean </span><span class="s1">timedBarIsDone = </span><span class="s0">false;</span>
+    <span class="s0">private boolean </span><span class="s1">GusTimerIsActive = </span><span class="s0">false;</span>
+    <span class="s0">public void </span><span class="s1">mouseIsReleased() {</span>
+        <span class="s0">if</span><span class="s1">(!Gdx.input.isTouched()) {</span>
+            <span class="s1">gustav.setLocked(</span><span class="s0">false</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">resize(</span><span class="s0">int </span><span class="s1">width</span><span class="s0">, int </span><span class="s1">height) {</span>
+
+    <span class="s1">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">pause() {</span>
+
+    <span class="s1">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">resume() {</span>
+
+    <span class="s1">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">show() {</span>
+
+    <span class="s1">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">hide() {</span>
+
+    <span class="s1">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">dispose() {</span>
+
+    <span class="s1">}</span>
+
+    <span class="s4">//-------------------------------------------------------------</span>
+    <span class="s4">//-------------------------------------------------------------</span>
+    <span class="s4">//-------------------------------------------------------------</span>
+    <span class="s4">//-------------------------------------------------------------</span>
+    <span class="s4">//INITIATE SWITCH</span>
+    <span class="s4">//-------------------------------------------------------------</span>
+    <span class="s4">//-------------------------------------------------------------</span>
+    <span class="s4">//-------------------------------------------------------------</span>
+    <span class="s4">//-------------------------------------------------------------</span>
+
+    <span class="s0">private </span><span class="s1">Fighter player = harald</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Fighter enemy = gustav</span><span class="s0">;</span>
+
+    <span class="s0">private int </span><span class="s1">timedBarWidthPlayer = timedBarWidthHarald</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">widthPerFramePlayer = widthPerFrameHarald</span><span class="s0">;</span>
+
+    <span class="s0">private int </span><span class="s1">timedBarWidthEnemy = timedBarWidthGustav</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">widthPerFrameEnemy = widthPerFrameGustav</span><span class="s0">;</span>
+
+    <span class="s0">boolean </span><span class="s1">isSwitch = </span><span class="s0">false;</span>
+    <span class="s0">int </span><span class="s1">switchCounter = </span><span class="s2">0</span><span class="s0">;</span>
+    <span class="s0">public void </span><span class="s1">initiateSwitch() {</span>
+        <span class="s0">if </span><span class="s1">(player == harald) {</span>
+            <span class="s1">gameIsPaused = </span><span class="s0">true;</span>
+            <span class="s1">switchCounter = </span><span class="s2">60</span><span class="s0">;</span>
+            <span class="s1">isSwitch = </span><span class="s0">true;</span>
+            <span class="s1">player = gustav</span><span class="s0">;</span>
+            <span class="s1">enemy = harald</span><span class="s0">;</span>
+            <span class="s1">btnsX = Gdx.graphics.getWidth() - </span><span class="s2">330</span><span class="s0">;</span>
+            <span class="s1">timedBarWidthPlayer = timedBarWidthGustav</span><span class="s0">;</span>
+            <span class="s1">widthPerFramePlayer = widthPerFrameGustav</span><span class="s0">;</span>
+            <span class="s1">timedBarWidthEnemy = timedBarWidthHarald</span><span class="s0">;</span>
+            <span class="s1">widthPerFrameEnemy = widthPerFrameHarald</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s1">gameIsPaused = </span><span class="s0">true;</span>
+            <span class="s1">switchCounter = </span><span class="s2">60</span><span class="s0">;</span>
+            <span class="s1">player = harald</span><span class="s0">;</span>
+            <span class="s1">enemy = gustav</span><span class="s0">;</span>
+            <span class="s1">btnsX = </span><span class="s2">20</span><span class="s0">;</span>
+            <span class="s1">timedBarWidthPlayer = timedBarWidthHarald</span><span class="s0">;</span>
+            <span class="s1">widthPerFramePlayer = widthPerFrameHarald</span><span class="s0">;</span>
+            <span class="s1">timedBarWidthEnemy = timedBarWidthGustav</span><span class="s0">;</span>
+            <span class="s1">widthPerFrameEnemy = widthPerFrameGustav</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>Main.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Main.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.mygdx.game</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.ApplicationAdapter</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.Game</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.OrthographicCamera</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.Texture</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.g2d.SpriteBatch</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.glutils.ShapeRenderer</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.utils.ScreenUtils</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">java.awt.event.MouseEvent</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.awt.event.MouseListener</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.awt.event.MouseMotionListener</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">Main </span><span class="s0">extends </span><span class="s1">Game </span><span class="s0">implements </span><span class="s1">Constants {</span>
+
+	<span class="s0">public </span><span class="s1">Main() {}</span>
+	<span class="s0">public </span><span class="s1">SpriteBatch batch</span><span class="s0">;</span>
+	<span class="s1">ShapeRenderer shape</span><span class="s0">;</span>
+
+	<span class="s1">Battle screen</span><span class="s0">;</span>
+	<span class="s0">int </span><span class="s1">ex</span><span class="s0">;</span>
+	<span class="s0">int </span><span class="s1">ey</span><span class="s0">;</span>
+
+	<span class="s1">OrthographicCamera camera</span><span class="s0">;</span>
+
+
+
+	<span class="s1">@Override</span>
+	<span class="s0">public void </span><span class="s1">create () {</span>
+		<span class="s1">screen = </span><span class="s0">new </span><span class="s1">Battle(</span><span class="s0">this</span><span class="s1">)</span><span class="s0">;</span>
+		<span class="s1">batch = </span><span class="s0">new </span><span class="s1">SpriteBatch()</span><span class="s0">;</span>
+		<span class="s1">shape = </span><span class="s0">new </span><span class="s1">ShapeRenderer()</span><span class="s0">;</span>
+		<span class="s1">camera = </span><span class="s0">new </span><span class="s1">OrthographicCamera()</span><span class="s0">;</span>
+		<span class="s1">camera.setToOrtho(</span><span class="s0">false, </span><span class="s2">800</span><span class="s0">, </span><span class="s2">480</span><span class="s1">)</span><span class="s0">;</span>
+		<span class="s3">//img = new Texture(&quot;badlogic.jpg&quot;);</span>
+		<span class="s1">setScreen(screen)</span><span class="s0">;</span>
+	<span class="s1">}</span>
+	
+	<span class="s1">@Override</span>
+	<span class="s0">public void </span><span class="s1">dispose () {</span>
+		<span class="s1">batch.dispose()</span><span class="s0">;</span>
+		<span class="s1">shape.dispose()</span><span class="s0">;</span>
+	<span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>

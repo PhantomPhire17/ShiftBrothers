@@ -1,0 +1,260 @@
+<html>
+<head>
+<title>GameScreen.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #808080;}
+.s4 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+GameScreen.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.mygdx.game</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.Gdx</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.ScreenAdapter</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.Color</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.Texture</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.glutils.ShapeRenderer</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.scenes.scene2d.ui.Label</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.scenes.scene2d.ui.TextField</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.utils.ScreenUtils</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.mygdx.game.abilities.Attack</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.mygdx.game.abilities.Defend</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.mygdx.game.abilities.Water</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">java.util.ArrayList</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">GameScreen </span><span class="s0">extends </span><span class="s1">ScreenAdapter </span><span class="s0">implements </span><span class="s1">Constants {</span>
+
+    <span class="s1">Attack at = </span><span class="s0">new </span><span class="s1">Attack()</span><span class="s0">;</span>
+    <span class="s0">private float </span><span class="s1">delta</span><span class="s0">;</span>
+
+    <span class="s0">private </span><span class="s1">Ability ab</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">KLabel timeLabel</span><span class="s0">;</span>
+    <span class="s1">TextField tf</span><span class="s0">;</span>
+    <span class="s1">General c = </span><span class="s0">new </span><span class="s1">General()</span><span class="s0">;</span>
+    <span class="s1">Texture img</span><span class="s0">;</span>
+
+    <span class="s0">boolean </span><span class="s1">drawRect = </span><span class="s0">false;</span>
+    <span class="s0">boolean </span><span class="s1">hey = </span><span class="s0">false;</span>
+    <span class="s0">boolean </span><span class="s1">buddy = </span><span class="s0">false;</span>
+    <span class="s1">KTable tab1</span><span class="s0">;</span>
+    <span class="s1">KTable tab2</span><span class="s0">;</span>
+
+    <span class="s0">private </span><span class="s1">Color color = Color.GREEN</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Color alpha = </span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">1</span><span class="s0">,</span><span class="s2">1</span><span class="s0">,</span><span class="s2">1</span><span class="s0">,</span><span class="s2">0.3f</span><span class="s1">)</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">ArrayList&lt;Integer&gt; invisibleRects = </span><span class="s0">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s0">;</span>
+    <span class="s1">Rect testrect</span><span class="s0">;</span>
+    <span class="s1">Label lab</span><span class="s0">;</span>
+    <span class="s1">KLabel clickedAbility</span><span class="s0">;</span>
+    <span class="s0">int </span><span class="s1">ex=</span><span class="s2">200</span><span class="s0">;</span>
+    <span class="s0">int </span><span class="s1">ey=</span><span class="s2">400</span><span class="s0">;</span>
+    <span class="s0">int </span><span class="s1">n = </span><span class="s2">12</span><span class="s0">;</span>
+    <span class="s0">int </span><span class="s1">nx</span><span class="s0">;</span>
+    <span class="s0">int </span><span class="s1">ny</span><span class="s0">;</span>
+    <span class="s0">int </span><span class="s1">h = Gdx.graphics.getHeight()</span><span class="s0">;</span>
+
+    <span class="s0">private </span><span class="s1">Main game</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Ball circleAt</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Ball circleWater</span><span class="s0">;</span>
+
+    <span class="s0">private </span><span class="s1">Ball circleDefend</span><span class="s0">;</span>
+
+    <span class="s0">public </span><span class="s1">GameScreen(Main game) {</span>
+        <span class="s0">this</span><span class="s1">.game = game</span><span class="s0">;</span>
+        <span class="s1">invisibleRects = c.fillInt(n)</span><span class="s0">;</span>
+        <span class="s1">SHAPE.begin(ShapeRenderer.ShapeType.Filled)</span><span class="s0">;</span>
+        <span class="s1">setUp()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+
+    <span class="s3">//1. SETUP</span>
+
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+
+    <span class="s0">private void </span><span class="s1">setUp() {</span>
+        <span class="s1">addFighters()</span><span class="s0">;</span>
+        <span class="s1">addTables()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">private void </span><span class="s1">addFighters() {}</span>
+
+    <span class="s0">private void </span><span class="s1">addTables() {</span>
+        <span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i=</span><span class="s2">0</span><span class="s0">; </span><span class="s1">i&lt;</span><span class="s2">5</span><span class="s0">; </span><span class="s1">i++) {</span>
+            <span class="s1">tab1 = </span><span class="s0">new </span><span class="s1">KTable(game)</span><span class="s0">;</span>
+            <span class="s1">tab2 = </span><span class="s0">new </span><span class="s1">KTable(game)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+
+    <span class="s3">//2. RENDER</span>
+
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">render (</span><span class="s0">float </span><span class="s1">delta) {</span>
+        <span class="s0">this</span><span class="s1">.delta = delta</span><span class="s0">;</span>
+        <span class="s1">ScreenUtils.clear(</span><span class="s2">0</span><span class="s0">, </span><span class="s2">0</span><span class="s0">, </span><span class="s2">0.3f</span><span class="s0">, </span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">game.shape.begin(ShapeRenderer.ShapeType.Filled)</span><span class="s0">;</span>
+        <span class="s1">drawShapes()</span><span class="s0">;</span>
+        <span class="s1">game.shape.end()</span><span class="s0">;</span>
+        <span class="s1">game.batch.begin()</span><span class="s0">;</span>
+        <span class="s1">drawTextures()</span><span class="s0">;</span>
+        <span class="s1">game.batch.end()</span><span class="s0">;</span>
+
+    <span class="s1">}</span>
+
+    <span class="s3">//2.1 RENDER SHAPES</span>
+
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+
+    <span class="s0">public void </span><span class="s1">drawShapes() {</span>
+        <span class="s1">testingShapes()</span><span class="s0">;</span>
+        <span class="s1">drawTables()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">drawTables() {</span>
+            <span class="s1">checkMouseActions()</span><span class="s0">;</span>
+            <span class="s1">tab1.setMouseListener(nx</span><span class="s0">, </span><span class="s1">ny)</span><span class="s0">;</span>
+            <span class="s1">tab2.setMouseListener(nx</span><span class="s0">, </span><span class="s1">ny)</span><span class="s0">;</span>
+            <span class="s1">setTableColors()</span><span class="s0">;</span>
+            <span class="s1">tab1.drawTable(T1_X</span><span class="s0">, </span><span class="s1">T_Y</span><span class="s0">, </span><span class="s2">100</span><span class="s0">, </span><span class="s2">50</span><span class="s0">, </span><span class="s1">tab1.getRectNumber()</span><span class="s0">, </span><span class="s2">5</span><span class="s0">, </span><span class="s1">game.shape)</span><span class="s0">;</span>
+            <span class="s1">tab2.drawTable(T2_X</span><span class="s0">, </span><span class="s1">T_Y</span><span class="s0">, </span><span class="s2">100</span><span class="s0">, </span><span class="s2">50</span><span class="s0">, </span><span class="s2">1</span><span class="s0">, </span><span class="s2">5</span><span class="s0">, </span><span class="s1">game.shape)</span><span class="s0">;</span>
+
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setTableColors() {</span>
+        <span class="s1">tab1.setHighlightColor(</span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">0.5f</span><span class="s0">, </span><span class="s2">0.5f</span><span class="s0">, </span><span class="s2">1</span><span class="s0">, </span><span class="s2">1</span><span class="s1">))</span><span class="s0">;</span>
+        <span class="s1">tab2.setHighlightColor(</span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">1</span><span class="s0">, </span><span class="s2">0.5f</span><span class="s0">, </span><span class="s2">0.5f</span><span class="s0">, </span><span class="s2">1</span><span class="s1">))</span><span class="s0">;</span>
+        <span class="s1">tab1.setColor(</span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">0</span><span class="s0">, </span><span class="s2">0.1f</span><span class="s0">, </span><span class="s2">0.6f</span><span class="s0">, </span><span class="s2">1</span><span class="s1">))</span><span class="s0">;</span>
+        <span class="s1">tab2.setColor(</span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">0.6f</span><span class="s0">, </span><span class="s2">0f</span><span class="s0">, </span><span class="s2">0</span><span class="s0">, </span><span class="s2">1</span><span class="s1">))</span><span class="s0">;</span>
+        <span class="s1">tab2.setSecondaryColor(</span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">0.8f</span><span class="s0">, </span><span class="s2">0</span><span class="s0">, </span><span class="s2">0</span><span class="s0">, </span><span class="s2">1</span><span class="s1">))</span><span class="s0">;</span>
+        <span class="s1">tab1.setHighlightedRects(</span><span class="s0">false</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(tab1.isTable() == </span><span class="s0">true</span><span class="s1">) {</span>
+            <span class="s1">tab1.setHighlightedRects(</span><span class="s0">true</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s3">//2.2 RENDER TEXTURES AND LABELS</span>
+
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+
+    <span class="s0">public void </span><span class="s1">drawTextures() {</span>
+        <span class="s1">testingTextures()</span><span class="s0">;</span>
+        <span class="s1">nx = Gdx.input.getX()</span><span class="s0">;</span>
+        <span class="s1">ny = h - Gdx.input.getY()</span><span class="s0">;</span>
+        <span class="s1">drawFighters()</span><span class="s0">;</span>
+        <span class="s1">drawLabels()</span><span class="s0">;</span>
+        <span class="s1">drawClockLabel()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">int </span><span class="s1">frame = </span><span class="s2">0</span><span class="s0">;</span>
+    <span class="s0">int </span><span class="s1">seconds = </span><span class="s2">60</span><span class="s0">;</span>
+    <span class="s0">public void </span><span class="s1">drawClockLabel() {</span>
+        <span class="s1">frame++</span><span class="s0">;</span>
+        <span class="s1">seconds = </span><span class="s2">10 </span><span class="s1">- frame/</span><span class="s2">60</span><span class="s0">;</span>
+        <span class="s1">timeLabel = </span><span class="s0">new </span><span class="s1">KLabel(</span><span class="s4">&quot;&quot; </span><span class="s1">+ seconds)</span><span class="s0">;</span>
+        <span class="s1">timeLabel.drawLabel(Gdx.graphics.getWidth()/</span><span class="s2">2</span><span class="s0">, </span><span class="s2">800</span><span class="s0">, </span><span class="s1">game.batch)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(seconds == -</span><span class="s2">1</span><span class="s1">) {</span>
+            <span class="s1">frame = </span><span class="s2">0</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">checkMouseActions() {</span>
+        <span class="s1">mouseIsClicked()</span><span class="s0">;</span>
+        <span class="s1">mouseIsReleased()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">drawFighters() {</span>
+        <span class="s1">game.batch.draw(harald.getTexture()</span><span class="s0">, </span><span class="s1">P1_X</span><span class="s0">, </span><span class="s1">P_Y)</span><span class="s0">;</span>
+        <span class="s1">game.batch.draw(gustav.getTexture()</span><span class="s0">, </span><span class="s1">P2_X</span><span class="s0">, </span><span class="s1">P_Y)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">drawLabels() {</span>
+        <span class="s1">drawTableLabels()</span><span class="s0">;</span>
+
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">drawTableLabels() {</span>
+        <span class="s1">tab1.drawLabels(game.batch)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s3">//2.3 MOUSE EVENTS</span>
+
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+    <span class="s3">//---------------------------------------</span>
+
+    <span class="s0">public void </span><span class="s1">mouseIsClicked() {</span>
+        <span class="s0">if</span><span class="s1">(Gdx.input.isTouched()) {</span>
+            <span class="s0">int </span><span class="s1">n = tab1.getRectIndex(nx</span><span class="s0">,</span><span class="s1">ny)</span><span class="s0">;</span>
+            <span class="s1">buddy = </span><span class="s0">true;</span>
+            <span class="s0">if </span><span class="s1">((tab1.isTable()==</span><span class="s0">true</span><span class="s1">)) {</span>
+                <span class="s1">ab = tab1.getAbility(nx</span><span class="s0">,</span><span class="s1">ny)</span><span class="s0">;</span>
+                <span class="s1">tab1.addRect(ab)</span><span class="s0">;</span>
+                <span class="s3">//clickedAbility = new KLabel(&quot;&quot; + tabs1[k].getAllRectsSize(), P1_X, HP_Y-25, game.batch);</span>
+            <span class="s1">}</span>
+            <span class="s1">at.run(harald</span><span class="s0">,</span><span class="s1">gustav)</span><span class="s0">;</span>
+            <span class="s1">gustav.setLocked(</span><span class="s0">true</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">mouseIsReleased() {</span>
+        <span class="s0">if </span><span class="s1">(!Gdx.input.isTouched()) {</span>
+            <span class="s1">gustav.setLocked(</span><span class="s0">false</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">tab1.setRectSperre(</span><span class="s0">false</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">tab2.setRectSperre(</span><span class="s0">false</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">hide() {</span>
+
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">testingShapes() {</span>
+        <span class="s1">testrect = </span><span class="s0">new </span><span class="s1">Rect()</span><span class="s0">;</span>
+        <span class="s1">testrect.setDimensions(</span><span class="s2">300</span><span class="s0">,</span><span class="s2">900</span><span class="s0">,</span><span class="s2">100</span><span class="s0">,</span><span class="s2">300</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">testrect.setColor(Color.BLACK)</span><span class="s0">;</span>
+        <span class="s1">testrect.setLabel(</span><span class="s4">&quot;ThisAbility&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">testrect.draw(game.shape)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">testingTextures() {</span>
+        <span class="s0">int </span><span class="s1">x = testrect.getRectX()</span><span class="s0">;</span>
+        <span class="s0">int </span><span class="s1">y = testrect.getRectY()</span><span class="s0">;</span>
+        <span class="s1">testrect.drawLabel(game.batch)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+<span class="s1">}</span>
+</pre>
+</body>
+</html>

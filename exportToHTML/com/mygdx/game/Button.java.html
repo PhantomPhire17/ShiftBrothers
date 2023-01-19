@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>Button.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Button.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.mygdx.game</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.Color</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.g2d.SpriteBatch</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.glutils.ShapeRenderer</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">Button </span><span class="s0">extends </span><span class="s1">Rect {</span>
+    <span class="s0">private int </span><span class="s1">x</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">y</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">ex</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">ey</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">width</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">height</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">KLabel lab</span><span class="s0">;</span>
+
+    <span class="s0">public </span><span class="s1">Button(){</span>
+        <span class="s0">super</span><span class="s1">()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public </span><span class="s1">KLabel getLabel() {</span>
+        <span class="s0">return </span><span class="s1">lab</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setLabel(KLabel lab) {</span>
+        <span class="s0">this</span><span class="s1">.lab = lab</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setLabel(CharSequence text) {</span>
+        <span class="s1">lab = </span><span class="s0">new </span><span class="s1">KLabel(text)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">drawLabel(SpriteBatch batch) {</span>
+        <span class="s1">lab.drawLabel(centerX()</span><span class="s0">, </span><span class="s1">centerY()</span><span class="s0">, </span><span class="s1">batch)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public int </span><span class="s1">centerX() {</span>
+       <span class="s0">return </span><span class="s1">x + width/</span><span class="s2">2</span><span class="s0">;</span><span class="s3">// - lab.getText().length()/2;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public int </span><span class="s1">centerY() {</span>
+        <span class="s0">return </span><span class="s1">y - height/</span><span class="s2">2</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s1">Ability ab</span><span class="s0">;</span>
+
+    <span class="s0">public void </span><span class="s1">setMouseListeners(</span><span class="s0">int </span><span class="s1">ex</span><span class="s0">, int </span><span class="s1">ey) {</span>
+        <span class="s0">this</span><span class="s1">.ex = ex</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.ey = ey</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public boolean </span><span class="s1">isButton(</span><span class="s0">int </span><span class="s1">ex</span><span class="s0">, int </span><span class="s1">ey) {</span>
+        <span class="s0">if </span><span class="s1">((ex &gt; getRectX()) &amp;&amp; (ex &lt; getRectX() + getRectWidth()) &amp;&amp; (ey &gt; getRectY() - getRectHeight()) &amp;&amp; (ey &lt; getRectY())) {</span>
+            <span class="s0">return true;</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s0">return false;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s0">private </span><span class="s1">Color highlightcolor</span><span class="s0">;</span>
+    <span class="s0">public void </span><span class="s1">setHighlightColor(Color color) {</span>
+        <span class="s0">this</span><span class="s1">.highlightcolor = color</span><span class="s0">;</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>

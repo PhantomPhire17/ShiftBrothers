@@ -1,0 +1,395 @@
+<html>
+<head>
+<title>KTable.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #6a8759;}
+.s4 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+KTable.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.mygdx.game</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.Color</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.g2d.SpriteBatch</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.glutils.ShapeRenderer</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.math.Rectangle</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">java.util.ArrayList</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">KTable </span><span class="s0">extends </span><span class="s1">Rectangle </span><span class="s0">implements </span><span class="s1">Constants {</span>
+
+    <span class="s0">private </span><span class="s1">Main game</span><span class="s0">;</span>
+
+    <span class="s0">private </span><span class="s1">ArrayList&lt;Rect&gt; allRects = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Rect&gt;()</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">ArrayList&lt;Ability&gt; allAbilities = </span><span class="s0">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">ArrayList&lt;KLabel&gt; allLabels = </span><span class="s0">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">General c = </span><span class="s0">new </span><span class="s1">General()</span><span class="s0">;</span>
+
+    <span class="s0">private </span><span class="s1">ShapeRenderer shape</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">rectsPerRow = </span><span class="s2">4</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">rectsPerRowIncremental = </span><span class="s2">0</span><span class="s0">;</span>
+
+    <span class="s0">private int </span><span class="s1">x = </span><span class="s2">0</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">y = </span><span class="s2">0</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">tx</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">ty</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">ex</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">ey</span><span class="s0">;</span>
+
+    <span class="s0">private int </span><span class="s1">n = </span><span class="s2">8</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">width = </span><span class="s2">100</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">height = </span><span class="s2">50</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">nIncremental = </span><span class="s2">0</span><span class="s0">;</span>
+
+    <span class="s0">private int </span><span class="s1">tableWidth = width * rectsPerRow</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">tableHeight = height * rectsPerRow</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">String text = </span><span class="s3">&quot;DEFAULT&quot;</span><span class="s0">;</span>
+
+    <span class="s0">private </span><span class="s1">Color alpha = </span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">0</span><span class="s0">,</span><span class="s2">0</span><span class="s0">,</span><span class="s2">0</span><span class="s0">,</span><span class="s2">0.3f</span><span class="s1">)</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Color color = Color.WHITE</span><span class="s0">;</span>
+
+    <span class="s0">private </span><span class="s1">Color color2 = </span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">0</span><span class="s0">,</span><span class="s2">0.3f</span><span class="s0">,</span><span class="s2">0.8f</span><span class="s0">,</span><span class="s2">0</span><span class="s1">)</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Color highlight = </span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">1</span><span class="s0">,</span><span class="s2">1</span><span class="s0">,</span><span class="s2">1</span><span class="s0">,</span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+
+    <span class="s0">private </span><span class="s1">Color frameColor = Color.BLACK</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">selectedN = -</span><span class="s2">1</span><span class="s0">;</span>
+
+    <span class="s0">private int </span><span class="s1">savedN = n</span><span class="s0">;</span>
+
+    <span class="s0">private int </span><span class="s1">rectNumber = </span><span class="s2">1</span><span class="s0">;</span>
+    <span class="s0">private boolean </span><span class="s1">rectsHighlighted = </span><span class="s0">true;</span>
+    <span class="s0">private boolean </span><span class="s1">tableHighlighted = </span><span class="s0">true;</span>
+    <span class="s0">private boolean </span><span class="s1">sperre = </span><span class="s0">false;</span>
+
+    <span class="s0">private boolean </span><span class="s1">hasLabels = </span><span class="s0">false;</span>
+
+    <span class="s0">private boolean </span><span class="s1">isVisible = </span><span class="s0">true;</span>
+    <span class="s0">private boolean </span><span class="s1">allVisible = </span><span class="s0">true;</span>
+    <span class="s0">private </span><span class="s1">ArrayList&lt;Integer&gt; invisibleRects = </span><span class="s0">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s0">;</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s4">//0. CONSTRUCTORS</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s0">public </span><span class="s1">KTable(</span><span class="s0">int </span><span class="s1">x</span><span class="s0">, int </span><span class="s1">y) {</span>
+        <span class="s0">this</span><span class="s1">.x = x</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.y = y</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public </span><span class="s1">KTable(Main game) {</span>
+        <span class="s0">this</span><span class="s1">.game = game</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.shape = shape</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s4">//1. GETTERS</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s0">public int </span><span class="s1">getAllRectsSize() {</span>
+        <span class="s0">return </span><span class="s1">allRects.size()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public int </span><span class="s1">getRectX(</span><span class="s0">int </span><span class="s1">rectIndex) {</span>
+        <span class="s0">return </span><span class="s1">x + (rectIndex % rectsPerRow) * width</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public int </span><span class="s1">getRectY(</span><span class="s0">int </span><span class="s1">rectIndex) {</span>
+        <span class="s0">return </span><span class="s1">y - (rectIndex / rectsPerRow) * height - height</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public </span><span class="s1">Rect getRect(</span><span class="s0">int </span><span class="s1">index) {</span>
+        <span class="s0">return </span><span class="s1">allRects.get(index)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public int </span><span class="s1">getRectNumber() {</span>
+        <span class="s0">return </span><span class="s1">nIncremental+</span><span class="s2">1</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public int </span><span class="s1">getnIncremental() {</span>
+        <span class="s0">return </span><span class="s1">nIncremental</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public int </span><span class="s1">getRectIndex(</span><span class="s0">int </span><span class="s1">gx</span><span class="s0">, int </span><span class="s1">gy) {</span>
+        <span class="s0">int </span><span class="s1">tx = getTableX(gx)</span><span class="s0">;</span>
+        <span class="s0">int </span><span class="s1">ty = getTableY(gy)</span><span class="s0">;</span>
+        <span class="s0">int </span><span class="s1">col = tx/width</span><span class="s0">;</span>
+        <span class="s0">int </span><span class="s1">row = ty/height</span><span class="s0">;</span>
+        <span class="s0">return </span><span class="s1">col + row * rectsPerRow</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public int </span><span class="s1">getTableX(</span><span class="s0">int </span><span class="s1">gx) {</span>
+        <span class="s0">return </span><span class="s1">gx - x</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public int </span><span class="s1">getTableY(</span><span class="s0">int </span><span class="s1">gy) {</span>
+        <span class="s0">return </span><span class="s1">y - gy</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public </span><span class="s1">Ability getAbility(</span><span class="s0">int </span><span class="s1">nx</span><span class="s0">, int </span><span class="s1">ny) {</span>
+        <span class="s0">int </span><span class="s1">n = getRectIndex(nx</span><span class="s0">,</span><span class="s1">ny)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(!(n &gt;= allRects.size()) &amp;&amp; !(n&lt;</span><span class="s2">0</span><span class="s1">)) {</span>
+            <span class="s1">Rect clickedRect = allRects.get(n)</span><span class="s0">;</span>
+            <span class="s0">return </span><span class="s1">allRects.get(n).getAbility()</span><span class="s0">;</span>
+        <span class="s1">}</span>
+        <span class="s0">return new </span><span class="s1">Ability()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public int </span><span class="s1">getRowNumber() {</span>
+        <span class="s0">int </span><span class="s1">rowNumber = n / rectsPerRow</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(n % rectsPerRow == </span><span class="s2">0</span><span class="s1">) {</span>
+            <span class="s0">return </span><span class="s1">rowNumber</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s0">return </span><span class="s1">rowNumber + </span><span class="s2">1</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s4">//2. SETTERS</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s0">public void </span><span class="s1">setColor(Color color) {</span>
+        <span class="s0">this</span><span class="s1">.color = color</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setInvisible(</span><span class="s0">int </span><span class="s1">rectIndex) {</span>
+        <span class="s4">//rectIndex = -1: Set all rects invisible</span>
+        <span class="s0">if </span><span class="s1">(rectIndex == -</span><span class="s2">1</span><span class="s1">) {</span>
+            <span class="s1">allVisible = </span><span class="s0">false;</span>
+        <span class="s1">}</span>
+        <span class="s1">invisibleRects.add(rectIndex)</span><span class="s0">;</span>
+       <span class="s4">// allRects.get(rectIndex).setVisible(false);</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setInvisible(ArrayList&lt;Integer&gt; list) {</span>
+        <span class="s1">invisibleRects = list</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setVisible(</span><span class="s0">int </span><span class="s1">rectIndex) {</span>
+        <span class="s1">allVisible = </span><span class="s0">true;</span>
+        <span class="s1">allRects.get(rectIndex).setVisible(</span><span class="s0">true</span><span class="s1">)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setFrameColor(Color frameColor) {</span>
+        <span class="s0">this</span><span class="s1">.frameColor = frameColor</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setRectSperre(</span><span class="s0">boolean </span><span class="s1">b) {</span>
+        <span class="s1">sperre = b</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setHighlightColor(Color color) {</span>
+        <span class="s0">this</span><span class="s1">.highlight = color</span><span class="s0">;</span>
+        <span class="s1">rectsHighlighted = </span><span class="s0">true;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setHighlightedTable(</span><span class="s0">boolean </span><span class="s1">b) {</span>
+        <span class="s1">tableHighlighted = b</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setHighlightedRects(</span><span class="s0">boolean </span><span class="s1">b) {</span>
+        <span class="s1">rectsHighlighted = b</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setMouseListener(</span><span class="s0">int </span><span class="s1">ex</span><span class="s0">, int </span><span class="s1">ey) {</span>
+        <span class="s0">this</span><span class="s1">.ex = ex</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.ey = ey</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setLabels(</span><span class="s0">boolean </span><span class="s1">b) {</span>
+        <span class="s1">hasLabels = b</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setBatch(SpriteBatch batch) {</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setSecondaryColor(Color color) {</span>
+        <span class="s1">color2 = color</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s4">//3. DRAW</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s0">public void </span><span class="s1">drawTable() {</span>
+        <span class="s1">checkForMouseMovement()</span><span class="s0">;</span>
+        <span class="s4">// savedN = n;</span>
+        <span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i=</span><span class="s2">0</span><span class="s0">; </span><span class="s1">i&lt;allRects.size()</span><span class="s0">; </span><span class="s1">i++) {</span>
+            <span class="s1">allLabels.add(allRects.get(i).getLabel())</span><span class="s0">;</span>
+            <span class="s1">allRects.get(i).setLabel(</span><span class="s3">&quot;&quot;</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s0">if </span><span class="s1">(invisibleRects.contains(i) || (allVisible == </span><span class="s0">false</span><span class="s1">)) {</span>
+                <span class="s1">allRects.get(i).setVisible(</span><span class="s0">false</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s0">if </span><span class="s1">(hasLabels == </span><span class="s0">true</span><span class="s1">) {</span>
+                <span class="s4">// allRects.get(i).setLabel(text, batch);</span>
+            <span class="s1">}</span>
+            <span class="s0">if </span><span class="s1">((i == selectedN) &amp;&amp; (isTable() == </span><span class="s0">true</span><span class="s1">)) {</span>
+                <span class="s1">allRects.get(i).setColor(highlight)</span><span class="s0">;</span>
+            <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                <span class="s0">if </span><span class="s1">(i % </span><span class="s2">2 </span><span class="s1">== </span><span class="s2">0</span><span class="s1">) {</span>
+                    <span class="s1">allRects.get(i).setColor(color)</span><span class="s0">;</span>
+                <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                    <span class="s1">allRects.get(i).setColor(color2)</span><span class="s0">;</span>
+                <span class="s1">}</span>
+            <span class="s1">}</span>
+            <span class="s1">allRects.get(i).setFrameColor(frameColor)</span><span class="s0">;</span>
+            <span class="s1">allRects.get(i).setDimensions(x + width*(i%rectsPerRow)</span><span class="s0">,</span><span class="s1">y - height*(i/rectsPerRow)</span><span class="s0">,</span><span class="s1">width</span><span class="s0">,</span><span class="s1">height)</span><span class="s0">;</span>
+            <span class="s1">allRects.get(i).draw(shape)</span><span class="s0">;</span>
+            <span class="s4">//allRects.get(i).setLabel(allAbilities.get(i).getName(), getRectX(i), getRectY(i));</span>
+
+        <span class="s1">}</span>
+        <span class="s1">savedN = n</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">drawLabels(SpriteBatch batch) {</span>
+        <span class="s1">Ability ab = </span><span class="s0">new </span><span class="s1">Ability()</span><span class="s0">;</span>
+        <span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i=</span><span class="s2">0</span><span class="s0">; </span><span class="s1">i&lt;allRects.size()</span><span class="s0">; </span><span class="s1">i++) {</span>
+            <span class="s1">ab = allRects.get(i).getAbility()</span><span class="s0">;</span>
+            <span class="s1">allRects.get(i).setLabel(ab.getName())</span><span class="s0">;</span>
+            <span class="s1">allRects.get(i).drawLabel(batch)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">drawTable(</span><span class="s0">int </span><span class="s1">x</span><span class="s0">, int </span><span class="s1">y</span><span class="s0">, int </span><span class="s1">width</span><span class="s0">, int </span><span class="s1">height) {</span>
+        <span class="s0">this</span><span class="s1">.x = x</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.y = y</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.width = width</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.height = height</span><span class="s0">;</span>
+        <span class="s1">allRects = c.fillRects(n+nIncremental</span><span class="s0">, </span><span class="s1">game.batch)</span><span class="s0">;</span>
+        <span class="s1">drawTable()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">drawTable(</span><span class="s0">int </span><span class="s1">x</span><span class="s0">, int </span><span class="s1">y</span><span class="s0">, int </span><span class="s1">width</span><span class="s0">, int </span><span class="s1">height</span><span class="s0">, int </span><span class="s1">rectsPerRow) {</span>
+        <span class="s0">this</span><span class="s1">.x = x</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.y = y</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.width = width</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.height = height</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.rectsPerRow = rectsPerRow</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.tableHeight = height * rectsPerRow</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.tableWidth = width * rectsPerRow</span><span class="s0">;</span>
+        <span class="s1">allRects = c.fillRects(nIncremental</span><span class="s0">, </span><span class="s1">game.batch)</span><span class="s0">;</span>
+        <span class="s1">drawTable()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">drawTable(</span><span class="s0">int </span><span class="s1">x</span><span class="s0">, int </span><span class="s1">y</span><span class="s0">, int </span><span class="s1">rectWidth</span><span class="s0">, int </span><span class="s1">rectHeight</span><span class="s0">, int </span><span class="s1">numberOfRects</span><span class="s0">, int </span><span class="s1">rectsPerRow</span><span class="s0">, </span><span class="s1">ShapeRenderer shape) {</span>
+        <span class="s0">this</span><span class="s1">.x = x</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.y = y</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.width = rectWidth</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.height = rectHeight</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.n = numberOfRects</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.rectsPerRow = rectsPerRow</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.tableHeight = height * rectsPerRow</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.tableWidth = width * rectsPerRow</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.shape = shape</span><span class="s0">;</span>
+        <span class="s1">allRects = c.fillRects(numberOfRects</span><span class="s0">, </span><span class="s1">game.batch)</span><span class="s0">;</span>
+        <span class="s1">allAbilities = c.fillAbilities(nIncremental+</span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">drawTable()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s4">//4. GENERAL</span>
+
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+    <span class="s4">//---------------------------------------</span>
+
+    <span class="s0">public boolean </span><span class="s1">isTable() {</span>
+        <span class="s0">boolean </span><span class="s1">XisRightOfBorder = ex &gt; x</span><span class="s0">;</span>
+        <span class="s0">boolean </span><span class="s1">XisLeftOfBorder = ex &lt; x + tableWidth</span><span class="s0">;</span>
+        <span class="s0">boolean </span><span class="s1">YisHigherThanBorder = ey &gt; y - tableHeight + height</span><span class="s0">;</span>
+        <span class="s0">boolean </span><span class="s1">YisLowerThanBorder = ey &lt; y</span><span class="s0">;</span>
+        <span class="s0">boolean </span><span class="s1">insideTable = getRectIndex(ex</span><span class="s0">,</span><span class="s1">ey) &lt; n</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(insideTable &amp;&amp; XisRightOfBorder &amp;&amp; XisLeftOfBorder &amp;&amp; YisHigherThanBorder &amp;&amp; YisLowerThanBorder) {</span>
+            <span class="s0">return true;</span>
+        <span class="s1">}</span>
+        <span class="s0">return false;</span>
+    <span class="s1">}</span>
+    <span class="s0">private void </span><span class="s1">highlightTable() {</span>
+        <span class="s0">this</span><span class="s1">.color = Color.YELLOW</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">addRect() {</span>
+        <span class="s0">if </span><span class="s1">(sperre == </span><span class="s0">false</span><span class="s1">) {</span>
+            <span class="s1">sperre = </span><span class="s0">true;</span>
+            <span class="s4">// rectNumber++;</span>
+            <span class="s1">nIncremental++</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">addRect(Ability ab) {</span>
+        <span class="s0">if </span><span class="s1">(sperre == </span><span class="s0">false</span><span class="s1">) {</span>
+            <span class="s1">sperre = </span><span class="s0">true;</span>
+            <span class="s4">// rectNumber++;</span>
+            <span class="s1">nIncremental++</span><span class="s0">;</span>
+            <span class="s1">allAbilities.add(ab)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">addRect(</span><span class="s0">int </span><span class="s1">row) {</span>
+        <span class="s0">if </span><span class="s1">(sperre == </span><span class="s0">false</span><span class="s1">) {</span>
+            <span class="s1">sperre = </span><span class="s0">true;</span>
+            <span class="s1">rectsPerRowIncremental++</span><span class="s0">;</span>
+            <span class="s1">rectsPerRow++</span><span class="s0">;</span>
+            <span class="s0">int </span><span class="s1">rowN = getRowNumber()</span><span class="s0">;</span>
+            <span class="s1">n = rowN * rectsPerRow</span><span class="s0">;</span>
+            <span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i=</span><span class="s2">0</span><span class="s0">; </span><span class="s1">i&lt;n</span><span class="s0">; </span><span class="s1">i++) {</span>
+                <span class="s0">if </span><span class="s1">((i % rectsPerRow == </span><span class="s2">0</span><span class="s1">) &amp;&amp; (i / rectsPerRow != row))  {</span>
+                    <span class="s1">invisibleRects.add(i)</span><span class="s0">;</span>
+                <span class="s1">}</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+    <span class="s0">private void </span><span class="s1">highlightCurrentRect(</span><span class="s0">int </span><span class="s1">n) {</span>
+        <span class="s1">selectedN = n</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">invertColors(</span><span class="s0">int </span><span class="s1">i) {</span>
+        <span class="s0">if </span><span class="s1">(i == </span><span class="s2">0</span><span class="s1">) {</span>
+            <span class="s1">color = </span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">0</span><span class="s0">,</span><span class="s2">0.3f</span><span class="s0">,</span><span class="s2">0.8f</span><span class="s0">,</span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">color2 = </span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">0</span><span class="s0">,</span><span class="s2">0.1f</span><span class="s0">,</span><span class="s2">0.6f</span><span class="s0">,</span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s1">color = </span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">0.8f</span><span class="s0">,</span><span class="s2">0</span><span class="s0">,</span><span class="s2">0f</span><span class="s0">,</span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">color2 = </span><span class="s0">new </span><span class="s1">Color(</span><span class="s2">0.6f</span><span class="s0">,</span><span class="s2">0</span><span class="s0">,</span><span class="s2">0f</span><span class="s0">,</span><span class="s2">1</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+    <span class="s0">private void </span><span class="s1">checkForMouseMovement() {</span>
+        <span class="s0">if </span><span class="s1">(isTable()==</span><span class="s0">true</span><span class="s1">) {</span>
+            <span class="s4">// if (tableHighlighted==true) { highlightTable(); }</span>
+            <span class="s0">if  </span><span class="s1">(rectsHighlighted==</span><span class="s0">true</span><span class="s1">) highlightCurrentRect(getRectIndex(ex</span><span class="s0">,</span><span class="s1">ey))</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>

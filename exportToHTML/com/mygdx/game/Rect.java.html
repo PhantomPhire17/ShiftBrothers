@@ -1,0 +1,191 @@
+<html>
+<head>
+<title>Rect.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6897bb;}
+.s4 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Rect.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.mygdx.game</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.Color</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.g2d.SpriteBatch</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.glutils.ShapeRenderer</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.math.Rectangle</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">Rect </span><span class="s0">extends </span><span class="s1">Rectangle </span><span class="s0">implements </span><span class="s1">Constants {</span>
+
+    <span class="s2">//1. VARIABLES</span>
+    <span class="s2">//1.1 Integer</span>
+
+    <span class="s0">private int </span><span class="s1">x</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">y</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">width</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">height</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">thickness = </span><span class="s3">1</span><span class="s0">;</span>
+
+    <span class="s2">//1.2 String</span>
+    <span class="s0">private </span><span class="s1">CharSequence text = </span><span class="s4">&quot;DEFAULT&quot;</span><span class="s0">;</span>
+
+    <span class="s2">//1.3. Color</span>
+
+    <span class="s0">private </span><span class="s1">Color color = Color.WHITE</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Color frameColor = Color.WHITE</span><span class="s0">;</span>
+
+    <span class="s2">//1.4 Boolean</span>
+
+    <span class="s0">private boolean </span><span class="s1">frameIsColored = </span><span class="s0">true;</span>
+    <span class="s0">private boolean </span><span class="s1">isVisible = </span><span class="s0">true;</span>
+
+    <span class="s2">//1.5 Project Classes</span>
+    <span class="s0">private </span><span class="s1">KLabel label = </span><span class="s0">new </span><span class="s1">KLabel(</span><span class="s4">&quot;Default&quot;</span><span class="s1">)</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Ability ab = </span><span class="s0">new </span><span class="s1">Ability()</span><span class="s0">;</span>
+
+    <span class="s2">//1.6 Renderer</span>
+    <span class="s0">private </span><span class="s1">ShapeRenderer shape</span><span class="s0">;</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---0. CONSTRUCTORS------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+
+    <span class="s0">public </span><span class="s1">Rect() {}</span>
+    <span class="s0">public </span><span class="s1">Rect(</span><span class="s0">int </span><span class="s1">x</span><span class="s0">, int </span><span class="s1">y</span><span class="s0">, int </span><span class="s1">width</span><span class="s0">, int </span><span class="s1">height) {</span>
+        <span class="s0">super</span><span class="s1">(x</span><span class="s0">,</span><span class="s1">y</span><span class="s0">,</span><span class="s1">width</span><span class="s0">,</span><span class="s1">height)</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.x = x</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.y = y</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.width = width</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.height = height</span><span class="s0">;</span>
+       <span class="s2">// label = new KLabel(text, batch);</span>
+    <span class="s1">}</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---1. GETTER------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+
+    <span class="s0">public int </span><span class="s1">getRectX() {</span><span class="s0">return </span><span class="s1">x</span><span class="s0">;</span><span class="s1">}</span>
+    <span class="s0">public int </span><span class="s1">getRectY() {</span>
+        <span class="s0">return </span><span class="s1">y</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public int </span><span class="s1">getRectWidth() {</span><span class="s0">return </span><span class="s1">width</span><span class="s0">;</span><span class="s1">}</span>
+    <span class="s0">public int </span><span class="s1">getRectHeight() {</span>
+        <span class="s0">return </span><span class="s1">height</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public </span><span class="s1">Ability getAbility() { </span><span class="s0">return </span><span class="s1">ab</span><span class="s0">; </span><span class="s1">}</span>
+    <span class="s0">public boolean </span><span class="s1">isVisible() {</span>
+        <span class="s0">return </span><span class="s1">isVisible</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public </span><span class="s1">KLabel getLabel() {</span>
+        <span class="s0">return </span><span class="s1">label</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public int </span><span class="s1">getXOffset() {</span>
+        <span class="s1">String s = (String) text</span><span class="s0">;</span>
+        <span class="s0">return </span><span class="s1">s.length()*</span><span class="s3">4</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---2. SETTER------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+
+    <span class="s0">public void </span><span class="s1">setPosition(</span><span class="s0">int </span><span class="s1">x</span><span class="s0">, int </span><span class="s1">y) { </span><span class="s0">this</span><span class="s1">.x = x</span><span class="s0">; this</span><span class="s1">.y = y</span><span class="s0">; </span><span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setSize(</span><span class="s0">int </span><span class="s1">width</span><span class="s0">, int </span><span class="s1">height) { </span><span class="s0">this</span><span class="s1">.width = width</span><span class="s0">; this</span><span class="s1">.height = height</span><span class="s0">;</span><span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setDimensions(</span><span class="s0">int </span><span class="s1">x</span><span class="s0">, int </span><span class="s1">y</span><span class="s0">, int </span><span class="s1">width</span><span class="s0">, int </span><span class="s1">height) {</span><span class="s0">this</span><span class="s1">.x = x</span><span class="s0">; this</span><span class="s1">.y = y</span><span class="s0">; this</span><span class="s1">.width = width</span><span class="s0">; this</span><span class="s1">.height = height</span><span class="s0">;</span><span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setColor(Color color) {</span>
+        <span class="s0">this</span><span class="s1">.color = color</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setVisible(</span><span class="s0">boolean </span><span class="s1">b) {</span>
+        <span class="s1">isVisible = b</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setLabel(CharSequence text</span><span class="s0">, int </span><span class="s1">rectX</span><span class="s0">, int </span><span class="s1">rectY) {</span>
+        <span class="s1">label = </span><span class="s0">new </span><span class="s1">KLabel(text</span><span class="s0">, </span><span class="s1">rectX + width/</span><span class="s3">2</span><span class="s0">, </span><span class="s1">rectY + height/</span><span class="s3">2</span><span class="s1">)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setLabel(CharSequence text) {</span>
+        <span class="s1">label = </span><span class="s0">new </span><span class="s1">KLabel(text)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setAbility(Ability ab) { </span><span class="s0">this</span><span class="s1">.ab = ab</span><span class="s0">; </span><span class="s1">}</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---3. DRAW------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+
+    <span class="s0">public void </span><span class="s1">draw(ShapeRenderer shape) {</span>
+        <span class="s0">if </span><span class="s1">(isVisible == </span><span class="s0">true</span><span class="s1">) {</span>
+            <span class="s1">shape.setColor(color)</span><span class="s0">;</span>
+            <span class="s1">shape.rect(x</span><span class="s0">,</span><span class="s1">y-height</span><span class="s0">,</span><span class="s1">width</span><span class="s0">,</span><span class="s1">height)</span><span class="s0">;</span>
+            <span class="s0">if </span><span class="s1">(frameIsColored == </span><span class="s0">true</span><span class="s1">) {</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">drawLabel(SpriteBatch batch) {</span>
+        <span class="s1">label.drawLabel(x + width/</span><span class="s3">4</span><span class="s0">, </span><span class="s1">y - height/</span><span class="s3">2</span><span class="s0">, </span><span class="s1">batch)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---UNUSED------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+
+    <span class="s0">public void </span><span class="s1">setFrameColor(Color frameColor</span><span class="s0">, int </span><span class="s1">thickness) {</span>
+        <span class="s0">this</span><span class="s1">.frameColor = frameColor</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.thickness = thickness</span><span class="s0">;</span>
+        <span class="s1">frameIsColored = </span><span class="s0">true;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setFrameColor(Color frameColor) {</span>
+        <span class="s0">this</span><span class="s1">.frameColor = frameColor</span><span class="s0">;</span>
+        <span class="s1">frameIsColored = </span><span class="s0">true;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setThickness(</span><span class="s0">int </span><span class="s1">thickness) {</span>
+        <span class="s0">this</span><span class="s1">.thickness = thickness</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setAbility(Ability ab</span><span class="s0">, int </span><span class="s1">x</span><span class="s0">, int </span><span class="s1">y) {</span>
+        <span class="s0">this</span><span class="s1">.ab = ab</span><span class="s0">;</span>
+        <span class="s1">setLabel(ab.getName()</span><span class="s0">, </span><span class="s1">x</span><span class="s0">, </span><span class="s1">y)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+
+</pre>
+</body>
+</html>

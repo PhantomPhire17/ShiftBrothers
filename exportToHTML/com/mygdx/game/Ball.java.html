@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>Ball.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Ball.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.mygdx.game</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.Color</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.badlogic.gdx.graphics.glutils.ShapeRenderer</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">Ball {</span>
+
+    <span class="s0">private int </span><span class="s1">x</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">y</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">ex</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">ey</span><span class="s0">;</span>
+    <span class="s0">private int </span><span class="s1">radius</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Color color</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">Ability ab</span><span class="s0">;</span>
+
+    <span class="s0">public </span><span class="s1">Ball() {}</span>
+    <span class="s0">public </span><span class="s1">Ball(</span><span class="s0">int </span><span class="s1">x</span><span class="s0">, int </span><span class="s1">y</span><span class="s0">, int </span><span class="s1">radius) {</span>
+        <span class="s0">this</span><span class="s1">.x = x</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.y = y</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.radius = radius</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+
+    <span class="s2">// 1. GETTERS</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+
+    <span class="s0">public </span><span class="s1">Ability getAbility() {</span>
+        <span class="s0">return </span><span class="s1">ab</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public boolean </span><span class="s1">isCircle() {</span>
+        <span class="s0">boolean </span><span class="s1">XisRightOfBorder = ex &gt; x</span><span class="s0">;</span>
+        <span class="s0">boolean </span><span class="s1">XisLeftOfBorder = ex &lt; x + radius*</span><span class="s3">2</span><span class="s0">;</span>
+        <span class="s0">boolean </span><span class="s1">YisHigherThanBorder = ey &gt; y - radius*</span><span class="s3">2 </span><span class="s1">+ radius</span><span class="s0">;</span>
+        <span class="s0">boolean </span><span class="s1">YisLowerThanBorder = ey &lt; y</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(XisRightOfBorder &amp;&amp; XisLeftOfBorder &amp;&amp; YisHigherThanBorder &amp;&amp; YisLowerThanBorder) {</span>
+            <span class="s0">return true;</span>
+        <span class="s1">}</span>
+        <span class="s0">return false;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">// 2. SETTERS</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s0">public void </span><span class="s1">setColor(Color color) {</span>
+        <span class="s0">this</span><span class="s1">.color = color</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setDimensions(</span><span class="s0">int </span><span class="s1">x</span><span class="s0">, int </span><span class="s1">y</span><span class="s0">, int </span><span class="s1">width</span><span class="s0">, int </span><span class="s1">height) {</span>
+        <span class="s0">this</span><span class="s1">.x = x</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.y = y</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.radius = radius</span><span class="s0">;</span>
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">setMouseListeners(</span><span class="s0">int </span><span class="s1">ex</span><span class="s0">, int </span><span class="s1">ey) {</span>
+        <span class="s0">this</span><span class="s1">.ex = ex</span><span class="s0">;</span>
+        <span class="s0">this</span><span class="s1">.ey = ey</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">setAbility(Ability ab) {</span>
+        <span class="s0">this</span><span class="s1">.ab = ab</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+
+    <span class="s2">// 3. DRAW</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+
+    <span class="s0">public void </span><span class="s1">draw(ShapeRenderer shape) {</span>
+        <span class="s1">shape.setColor(color)</span><span class="s0">;</span>
+        <span class="s1">shape.circle(x</span><span class="s0">,</span><span class="s1">y</span><span class="s0">,</span><span class="s1">radius)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+
+    <span class="s2">// 4. GENERAL</span>
+
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+    <span class="s2">//---------------------------------------</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>
