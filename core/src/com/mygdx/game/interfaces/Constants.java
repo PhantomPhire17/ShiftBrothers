@@ -10,6 +10,7 @@ import com.mygdx.game.animations.Damage;
 import com.mygdx.game.battleUtilities.AI;
 import com.mygdx.game.battleUtilities.BackendFunctions;
 import com.mygdx.game.battleUtilities.Timer;
+import com.mygdx.game.rendering.Clear;
 import com.mygdx.game.rendering.Renderer;
 
 import java.util.Random;
@@ -75,5 +76,7 @@ public interface Constants {
     BackendFunctions b = new BackendFunctions();
     AI ai = new AI();
     // Renderer renderer = new Renderer();
+
+    Clear cl = new Clear();
 
 }

@@ -87,7 +87,7 @@ public class BattleScreen extends ScreenAdapter implements Constants {
     KLabel lab;
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0f, 0.1f, 0, 1);
+        cl.clearColor(0.1f, 0,0,1);
         runGame();
         renderShapes();
         renderBatch();
