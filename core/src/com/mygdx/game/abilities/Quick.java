@@ -13,10 +13,11 @@ public class Quick extends Ability implements Constants {
     }
 
     public void run(Fighter actor, Fighter target) {
-        if ((b.getCurrentSwitchTime() >= 11) && actor.getGil() >= 15 && b.lockIsActivated()==false) {
+        if ((game.b.getCurrentSwitchTime() >= 11) && actor.getGil() >= 15 && game.b.lockIsActivated()==false) {
             actor.changeGil(-15);
             //harald.setCurrentSwitchTime(harald.getCurrentSwitchTime()-10);
-            b.setQuickIsActive(true);
+            //game.b.setQuickIsActive(true);
+            t.changeTime(10);
         }
     }
     public String getExplanation() {
@@ -24,7 +25,7 @@ public class Quick extends Ability implements Constants {
     }
 
     public boolean enoughGils(int gils) {
-        if (gils >= 15 && b.lockIsActivated() == false) {return true;} else {return false;}
+        if (gils >= 15 && game.b.lockIsActivated() == false) {return true;} else {return false;}
     }
 
     public int getTimer() {

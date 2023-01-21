@@ -17,7 +17,7 @@ public class GameOverScreen extends ScreenAdapter implements Constants {
     KLabel gOLabel;
     ShapeRenderer shape;
     Button btn;
-    public GameOverScreen(Game game, Fighter winner, ShapeRenderer shape, boolean playerHasWon) {
+    public GameOverScreen(Game game, Fighter winner, ShapeRenderer shape, boolean oneplayer, int player) {
         this.shape = shape;
         this.game = game;
         this.winner = winner;
@@ -27,7 +27,8 @@ public class GameOverScreen extends ScreenAdapter implements Constants {
         btn.setLabel("Play Again");
         btn.setDimensions(Gdx.graphics.getWidth()/2 - 180, 300, 300, 100);
         btn.setColor(Color.BLUE);
-        if (playerHasWon==true) { gameOver = "VICTORY!"; } else { gameOver = "GAME OVER \nTRY AGAIN"; }
+        if (oneplayer == true && player <= 1) { gameOver = "VICTORY!"; } else { gameOver = "GAME OVER... \n\nTRY AGAIN"; }
+        if (oneplayer == false && player <=1) { gameOver = "CONGRATULATIONS, PLAYER 1!"; } else { gameOver = "CONGRATULATIONS, PLAYER 2!"; }
     }
     int ex;
     int ey;

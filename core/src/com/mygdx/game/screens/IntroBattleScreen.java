@@ -46,9 +46,11 @@ public class IntroBattleScreen extends ScreenAdapter implements Constants {
     String gameOverString;
     private int rint;
     private boolean gustavLocked = false;
+    private int maxTime;
 
-    public IntroBattleScreen(Game game) {
+    public IntroBattleScreen(int maxTime, Game game) {
         this.game = game;
+        this.maxTime = maxTime;
         setup();
     }
 
@@ -68,7 +70,7 @@ public class IntroBattleScreen extends ScreenAdapter implements Constants {
         for (int i = 0; i < 12; i++) {
             btns.add(new Button());
             btns.get(i).setDimensions(btnsX + 185 * (i / 6), (btnsY - (i % 6) * 110), 180, 80);
-            btns.get(i).setAbility(allAbilities[i]);
+            btns.get(i).setAbility(allAbilitiesP1[i]);
             btns.get(i).setLabel(btns.get(i).getAbility().getName());
             btns.get(i).setMouseListeners(ex, ey);
             btns.get(i).setColor(new Color(0, 0, 0.3f, 1));
@@ -158,7 +160,7 @@ public class IntroBattleScreen extends ScreenAdapter implements Constants {
         if (i==6) drawQuickRandomDescription();
         if (i==7) drawLockDescription();
         if (i==8) drawStartDescription();
-        if (i > 8) game.setScreen(new BattleScreen(game));
+        if (i > 8) game.setScreen(new BattleScreen(maxTime, game));
     }
 
     private void drawOKButton() {

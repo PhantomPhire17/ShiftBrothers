@@ -42,22 +42,22 @@ public class TutorialScreen extends ScreenAdapter implements Constants {
     int ey;
     boolean setNewScreen = false;
     public void render(float delta) {
-        if (setNewScreen == true) game.setScreen(new GameOverScreen(game, harald, game.shape, true));
+        //if (setNewScreen == true) game.setScreen(new GameOverScreen(game, harald, game.shape, true));
         ex = Gdx.input.getX();
         ey = Gdx.graphics.getHeight() - Gdx.input.getY();
         ScreenUtils.clear(0, 0, 0, 1);
         game.shape.begin(ShapeRenderer.ShapeType.Filled);
         for (int i=0; i<3; i++) displayButton(i);
         if (Gdx.input.isTouched() && blitzkrieg.isButton(ex,ey)) {
-            b.setSwitchTime(11);
+            game.b.setSwitchTime(11);
             setNewScreen = true;
         }
         if (Gdx.input.isTouched() && gemetzel.isButton(ex+100,ey+300)) {
-            b.setSwitchTime(33);
+            game.b.setSwitchTime(33);
             //setNewScreen = true;
         }
         if (Gdx.input.isTouched() && kaffeklatsch.isButton(ex,ey)) {
-            b.setSwitchTime(55);
+            game.b.setSwitchTime(55);
             setNewScreen = true;
         }
         game.shape.end();

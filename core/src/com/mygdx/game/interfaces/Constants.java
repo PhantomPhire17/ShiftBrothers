@@ -8,10 +8,8 @@ import com.mygdx.game.*;
 import com.mygdx.game.abilities.*;
 import com.mygdx.game.animations.Damage;
 import com.mygdx.game.battleUtilities.AI;
-import com.mygdx.game.battleUtilities.BackendFunctions;
 import com.mygdx.game.battleUtilities.Timer;
 import com.mygdx.game.rendering.Clear;
-import com.mygdx.game.rendering.Renderer;
 
 import java.util.Random;
 
@@ -38,8 +36,8 @@ public interface Constants {
     public final int T_Y = P_Y - 300;
     public final Setup s = new Setup();
 
-    Fighter harald = new Fighter("warrior.png", 100000, 20, 10, 200);
-    Fighter gustav = new Fighter("redwizard.png", 100000, 20, 10, 200);
+    Fighter harald = new Fighter("warrior.png", 3000, 20, 10, 200);
+    Fighter gustav = new Fighter("redwizard.png", 3000, 20, 10, 200);
     Texture switchTex = new Texture("switch.png");
 
     Animation anima = new Animation();
@@ -70,10 +68,10 @@ public interface Constants {
     Quick quick = new Quick();
     Harm hrm = new Harm();
 
-    Ability[] allAbilities = {hrm, lock, cure1, tmp, don1, quick, att, trd, curex, prt, don2, rand};
+    Ability[] allAbilitiesP1 = {hrm, lock, cure1, tmp, slow, don1, quick, att, trd, curex, prt, haste, don2, rand};
+    Ability[] allAbilitiesP2 = {att, trd, curex, prt, haste, don2, rand, hrm, lock, cure1, tmp, slow, don1, quick};
 
     Timer t = new Timer();
-    BackendFunctions b = new BackendFunctions();
     AI ai = new AI();
     // Renderer renderer = new Renderer();
 

@@ -16,8 +16,8 @@ public class Randomize extends Ability implements Constants {
             actor.changeGil(-20);
             int n = rgen.nextInt(3,33);
             if (n < 3) n = 3;
-            b.setSwitchTime(n);
-            b.setRandomTime(true);
+            game.b.setSwitchTime(n);
+            game.b.setRandomTime(true);
         }
     }
 
@@ -26,12 +26,27 @@ public class Randomize extends Ability implements Constants {
     }
 
     public boolean enoughGils(int gils) {
-        if (gils >= 20 && b.lockIsActivated() == false) return true;
+        if (gils >= 20 && game.b.lockIsActivated() == false) return true;
         return false;
     }
 
     public int getTimer() {
         return 500;
+    }
+
+    //------------
+
+    public void setSwitchTime(int time) {
+
+    }
+
+    public void setRandomTime(boolean b) {
+        isRandom = b;
+    }
+
+    private boolean isRandom = false;
+    public boolean timeIsRandom() {
+        return isRandom;
     }
 
 }

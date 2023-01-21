@@ -4,7 +4,6 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.*;
 import com.mygdx.game.interfaces.Constants;
 
@@ -31,7 +30,7 @@ public class BattleScreen extends ScreenAdapter implements Constants {
     KLabel p1HP = new KLabel();
     KLabel p2HP = new KLabel();
     ArrayList<Button> btns = new ArrayList<Button>();
-    private int btnsNumber = 12;
+    private int btnsNumber = 14;
     private int timedBarWidthHarald = 360;
     private int timedBarWidthGustav = 360;
     private int timedBarWidthPlayer = timedBarWidthHarald;
@@ -41,9 +40,12 @@ public class BattleScreen extends ScreenAdapter implements Constants {
     Texture bg;
     boolean gameOver = false;
     private boolean gustavLocked = false;
+    private int maxTime;
 
-    public BattleScreen(Game game) {
+    public BattleScreen(int maxTime, Game game) {
         this.game = game;
+        this.maxTime = maxTime;
+        t.setMaxTime(maxTime);
         setup();
     }
 
@@ -52,6 +54,13 @@ public class BattleScreen extends ScreenAdapter implements Constants {
         setBackground();
         setAbilities();
         setButtons();
+        setSpeed();
+        maxTime = game.b.getMaxTime();
+    }
+
+    private void setSpeed() {
+        harald.setSpeed(10);
+        gustav.setSpeed(10);
     }
 
     private void setBackground() {
@@ -64,8 +73,8 @@ public class BattleScreen extends ScreenAdapter implements Constants {
     public void setButtons() {
         for (int i = 0; i < btnsNumber; i++) {
             btns.add(new Button());
-            btns.get(i).setDimensions(btnsX + 185 * (i / 6), (btnsY - (i % 6) * 110), 180, 80);
-            btns.get(i).setAbility(allAbilities[i]);
+            btns.get(i).setDimensions(btnsX + 185 * (i / 7), (btnsY - (i % 7) * 110), 180, 80);
+            btns.get(i).setAbility(allAbilitiesP1[i]);
             btns.get(i).setLabel(btns.get(i).getAbility().getName());
             btns.get(i).setMouseListeners(ex, ey);
             btns.get(i).setColor(new Color(0, 0, 0.3f, 1));
@@ -107,8 +116,8 @@ public class BattleScreen extends ScreenAdapter implements Constants {
             if (ai.isActive()) runEnemy();
         } else {
             gameOver = true;
-            if (player.isDead()) game.setScreen(new GameOverScreen(game, enemy, game.shape, false));
-            if (enemy.isDead()) game.setScreen(new GameOverScreen(game, player, game.shape, true));
+            if (player.isDead()) game.setScreen(new GameOverScreen(game, enemy, game.shape, true,2));
+            if (enemy.isDead()) game.setScreen(new GameOverScreen(game, player, game.shape, true,1));
         }
         runPlayer();
         runPlayer();
@@ -131,8 +140,8 @@ public class BattleScreen extends ScreenAdapter implements Constants {
         if (Gdx.input.isTouched()) {
             for (int i = 0; i < btnsNumber; i++) {
                 if (btns.get(i).isButton(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
-                    player.setAbility(allAbilities[i]);
-                    if ((allAbilities[i] == quick || allAbilities[i] == rand) && b.lockIsActivated() == true)
+                    player.setAbility(allAbilitiesP1[i]);
+                    if ((allAbilitiesP1[i] == quick || allAbilitiesP1[i] == rand) &&  game.b.lockIsActivated() == true)
                         return false;
                     return true;
                 }
@@ -222,7 +231,7 @@ public class BattleScreen extends ScreenAdapter implements Constants {
         game.shape.begin(ShapeRenderer.ShapeType.Filled);
         for (int i=0; i<btnsNumber; i++) {
             btns.get(i).draw(game.shape);
-            if (b.lockIsActivated() == true) {
+            if (game.b.lockIsActivated() == true) {
                 btns.get(1).setColor(Color.GRAY);
                 btns.get(5).setColor(Color.GRAY);
                 btns.get(11).setColor(Color.GRAY);
@@ -231,7 +240,7 @@ public class BattleScreen extends ScreenAdapter implements Constants {
                 btns.get(5).setColor(new Color(0, 0, 0.3f, 1));
                 btns.get(11).setColor(new Color(0, 0, 0.3f, 1));
             }
-            btns.get(i).setRectX(btnsX + 185 * (i / 6));
+            btns.get(i).setRectX(btnsX + 185 * (i / 7));
         }
         if ((harald.timerIsActive() == true) && (harald.getTempAbility().enoughGils(harald.getGil()) == true)) {
             timedBarHarald.drawTimedBar(game.shape);
@@ -275,8 +284,8 @@ public class BattleScreen extends ScreenAdapter implements Constants {
         if (gustav.isDead() == false) game.batch.draw(gustex, P2_X, P_Y);//animaGustav.draw(p2x, P_Y, gustav, game.batch);
     }
 
-    private Ability[] allAbilities1 = {hrm, lock, cure1, tmp, don1, quick};
-    private Ability[] allAbilities2 = {att, trd, curex, prt, don2, rand};
+    private Ability[] allAbilities1 = {hrm, lock, cure1, tmp, slow, don1, quick};
+    private Ability[] allAbilities2 = {att, trd, curex, prt, haste, don2, rand};
     private MLabel mlabel1 = new MLabel(allAbilities1);
     private MLabel mlabel2 = new MLabel(allAbilities2);
     public void drawLabels() {
@@ -312,8 +321,8 @@ public class BattleScreen extends ScreenAdapter implements Constants {
         }
     }
     public void drawPlayerStats() {
-        p1HP.drawLabel("HP: " + harald.getHP() + " / " + harald.getMaxHP() + "\n" + "Attack: " + harald.getAttack() + "\nDefense: " + harald.getDefense() + "\n\nGil: " + harald.getGil(), P1_X, P_Y-50, game.batch);
-        p2HP.drawLabel("HP: " + gustav.getHP() + " / " + gustav.getMaxHP() + "\n" + "Attack: " + gustav.getAttack() + "\nDefense: " + gustav.getDefense() + "\n\nGil: " + gustav.getGil(), P2_X, P_Y-50, game.batch);
+        p1HP.drawLabel("HP: " + harald.getHP() + " / " + harald.getMaxHP() + "\n" + "Attack: " + harald.getAttack() + "\nDefense: " + harald.getDefense() + "\nSpeed: " + harald.getSpeedAsString() + "\n\nGil: " + harald.getGil(), P1_X, P_Y-50, game.batch);
+        p2HP.drawLabel("HP: " + gustav.getHP() + " / " + gustav.getMaxHP() + "\n" + "Attack: " + gustav.getAttack() + "\nDefense: " + gustav.getDefense() + "\nSpeed: " + gustav.getSpeedAsString() + "\n\nGil: " + gustav.getGil(), P2_X, P_Y-50, game.batch);
     }
 
     @Override
@@ -360,9 +369,9 @@ public class BattleScreen extends ScreenAdapter implements Constants {
     public void initiateSwitch() {
         switchAbilityLabels();
         t.setTimeOver(false);
-        b.setRandomTime(false);
-        b.setQuickIsActive(false);
-        b.setLocked(false);
+        game.b.setRandomTime(false);
+        game.b.setQuickIsActive(false);
+        game.b.setLocked(false);
         if (player == harald) {
             switchCounter = 30;
             player = gustav;

@@ -53,16 +53,17 @@ public class TimedBar extends Rect implements Constants {
             this.setDimensions(x, P_Y + 300, width, 30);
             this.draw(shape);
             if (width > 0) {
-                if (fighter == gustav) x = x + Gdx.graphics.getFramesPerSecond()/2;
-                width = width - Gdx.graphics.getFramesPerSecond()/2;
+                if (fighter == gustav) x = x + FPS/(20-fighter.getSpeed());
+                width = width - FPS/(20-fighter.getSpeed());
             } else {
                 //haraldBarCounter = 30;
                // harald.getTempAbility().run(harald,gustav);
                 width = 360;
                 if (fighter == gustav) x = P2_X;
+                if (fighter == harald) fighter.getFixedAbility().run(harald, gustav);
+                if (fighter == gustav) fighter.getFixedAbility().run(gustav, harald);
                 fighter.setActiveTimer(false);
-                if (fighter == harald) fighter.getTempAbility().run(harald, gustav);
-                if (fighter == gustav) fighter.getTempAbility().run(gustav, harald);
+                fighter.setABLocked(false);
             }
 
 

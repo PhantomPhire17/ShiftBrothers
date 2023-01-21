@@ -8,22 +8,22 @@ public class Slow extends Ability {
     public Slow() {}
 
     public String getName() {
-        return "Slow (15)";
+        return "Slow (10)";
     }
 
     public void run(Fighter actor, Fighter target) {
-        if(actor.getGil() >= 15) {
-            actor.changeGil(-15);
-            target.changeSpeed(target.getSpeed()/2);
+        if(actor.getGil() >= 10) {
+            actor.changeGil(-10);
+            actor.changeSpeed(-2);
         }
     }
 
     public String getExplanation() {
-        return "Verlangsame dich oder deinen Gegner.";
+        return "Verringere deine Geschwindigkeit.";
     }
 
     public boolean enoughGils(int gils) {
-        if (gils >= 15) return true;
+        if (gils >= 10) return true;
         return false;
     }
 

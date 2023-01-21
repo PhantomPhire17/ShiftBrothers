@@ -67,4 +67,16 @@ public class BackendFunctions {
     public boolean timeIsRandom() {
         return randomTime;
     }
+
+
+    //---------SET MAX TIME-------
+
+    private int maxTime;
+    public void setMaxTime(int time) {
+        maxTime = time;
+    }
+
+    public int getMaxTime() {
+        return maxTime;
+    }
 }

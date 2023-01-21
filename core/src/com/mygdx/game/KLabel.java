@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -91,6 +92,10 @@ public class KLabel extends KObject implements Constants {
           font.getData().setScale(size);
           font.draw(batch, text, x, y);
          // renderer.draw(font, text, x, y);
+    }
+
+    public void setColor(Color color) {
+        font.setColor(color);
     }
 
     //---------------------------------------

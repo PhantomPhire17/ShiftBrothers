@@ -17,7 +17,7 @@ public class Fighter extends KObject implements Constants {
     Texture tex = new Texture("warrior.png");
     String path;
 
-    Ability ab;
+    Ability ab = att;
     private boolean isLocked = false;
 
 
@@ -138,14 +138,6 @@ public class Fighter extends KObject implements Constants {
 
     int modifiedTime;
 
-    public int getModifiedSwitchTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedSwitchTime(int time) {
-
-    }
-
     public void changeAttack(int delta) {
         if (isLocked == false) {
             this.attack += delta;
@@ -172,6 +164,17 @@ public class Fighter extends KObject implements Constants {
         return speed;
     }
 
+    public String getSpeedAsString() {
+        if (speed < 19) {
+            return Integer.toString(speed);
+        } else {
+            if (speed == 1) {
+                return "MIN";
+            }
+        }
+        return "MAX";
+    }
+
     public void setSpeed(int speed) {
         if (isLocked == false) {
             this.speed = speed;
@@ -181,6 +184,8 @@ public class Fighter extends KObject implements Constants {
     public void changeSpeed(int delta) {
         if (isLocked == false) {
             this.speed += delta;
+            if (speed < 1) speed = 1;
+            if (speed > 19) speed = 19;
         }
     }
 
@@ -217,7 +222,9 @@ public class Fighter extends KObject implements Constants {
     }
 
     public Ability getTempAbility() {
-        return ab;
+        if (ab != null) {
+            return ab;
+        } else { return att; }
     }
 
     private boolean activeT = false;
@@ -231,10 +238,23 @@ public class Fighter extends KObject implements Constants {
     }
 
     private boolean isActive = false;
-    public void setActive(boolean b) {
-        isActive = true;
+
+    private boolean abLocked = false;
+    public void setABLocked(boolean b) {
+        abLocked = b;
     }
-    public boolean timedBarDone() {
-        return isActive;
+
+    public boolean abIsLocked() {
+        return abLocked;
+    }
+
+    private Ability fixedAbility;
+    public void setFixedAbility(Ability tempAbility) {
+        fixedAbility = tempAbility;
+    }
+
+    public Ability getFixedAbility() {
+        if (fixedAbility != null) return fixedAbility;
+        return att;
     }
 }

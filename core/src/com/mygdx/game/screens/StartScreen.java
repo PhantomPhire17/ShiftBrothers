@@ -15,7 +15,7 @@ public class StartScreen extends ScreenAdapter implements Constants {
     Game game;
     Texture bg;
     Texture logo;
-    Button btn;
+    Button btn1P, btn2P;
 
     Button tutorial;
     Button blitzkrieg;
@@ -33,15 +33,19 @@ public class StartScreen extends ScreenAdapter implements Constants {
         if (harald.isDead()) harald.revive();
         if (gustav.isDead()) gustav.revive();
         bg = new Texture("bg.jpg");
-        btn = new Button();
+        btn1P = new Button();
+        btn2P = new Button();
         tutorial = new Button();
         interval = new Button();
         blitzkrieg = new Button();
         gemetzel = new Button();
         kaffeklatsch = new Button();
-        btn.setLabel("Start");
-        btn.setDimensions(Gdx.graphics.getWidth()/2 - 150, 300, 300, 100);
-        btn.setColor(Color.BLUE);
+        btn1P.setLabel("1 Player");
+        btn1P.setDimensions(Gdx.graphics.getWidth()/2 - 150, 350, 300, 100);
+        btn1P.setColor(Color.BLUE);
+        btn2P.setLabel("2 Players");
+        btn2P.setDimensions(Gdx.graphics.getWidth()/2 - 150, 200, 300, 100);
+        btn2P.setColor(Color.BLUE);
         logo = new Texture("shiftbrothersalpha.png");
         this.game = game;
 
@@ -69,16 +73,21 @@ public class StartScreen extends ScreenAdapter implements Constants {
 
     boolean startscreen = true;
     boolean setNewScreen = false;
+    private int maxTime;
+    private boolean oneplayer = true;
     public void render(float delta) {
         if (startscreen == true) {
             ex = Gdx.input.getX();
             ey = Gdx.graphics.getHeight() - Gdx.input.getY();
             ScreenUtils.clear(0, 0, 0, 1);
             game.batch.begin();
-            if (Gdx.input.isTouched() && btn.isButton(ex,ey)) {
+            if (Gdx.input.isTouched() && btn1P.isButton(ex,ey)) {
                 startscreen = false;
             }
-            btn.getLabel().drawLabel(Gdx.graphics.getWidth()/2 - 150, 250, game.batch);
+            if (Gdx.input.isTouched() && btn2P.isButton(ex,ey)) {
+                startscreen = false;
+                oneplayer = false;
+            }
             game.batch.draw(bg, 0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             game.batch.draw(logo, Gdx.graphics.getWidth()/2 - logo.getWidth()/2, 600);
             game.batch.draw(hartex, Gdx.graphics.getWidth()/2 - logo.getWidth()/2 - 180, 600);
@@ -86,13 +95,21 @@ public class StartScreen extends ScreenAdapter implements Constants {
             game.batch.end();
             game.shape = new ShapeRenderer();
             game.shape.begin(ShapeRenderer.ShapeType.Filled);
-            btn.draw(game.shape);
+            btn1P.draw(game.shape);
+            btn2P.draw(game.shape);
             game.shape.end();
             game.batch.begin();
-            btn.getLabel().drawLabel(Gdx.graphics.getWidth()/2 - 30, 260, game.batch);
+            btn1P.getLabel().drawLabel(Gdx.graphics.getWidth()/2 - 30, 310, game.batch);
+            btn2P.getLabel().drawLabel(Gdx.graphics.getWidth()/2 - 30, 160, game.batch);
             game.batch.end();
         } else {
-            if (setNewScreen==true) game.setScreen(new IntroBattleScreen(game));
+            if (setNewScreen==true) {
+                if (oneplayer == true) {
+                    game.setScreen(new BattleScreen(maxTime, game));
+                } else {
+                    game.setScreen(new TwoPlayerScreen(maxTime, game));
+                }
+            }
             ex = Gdx.input.getX();
             ey = Gdx.graphics.getHeight() - Gdx.input.getY();
             ScreenUtils.clear(0, 0, 0, 1);
@@ -102,15 +119,15 @@ public class StartScreen extends ScreenAdapter implements Constants {
             game.shape.begin(ShapeRenderer.ShapeType.Filled);
             for (int i=0; i<3; i++) displayButton(i);
             if (Gdx.input.isTouched() && blitzkrieg.isButton(ex,ey)) {
-                b.setSwitchTime(11);
+                maxTime = 11;
                 setNewScreen = true;
             }
             if (Gdx.input.isTouched() && gemetzel.isButton(ex,ey)) {
-                b.setSwitchTime(33);
+                maxTime = 33;
                 setNewScreen = true;
             }
             if (Gdx.input.isTouched() && kaffeklatsch.isButton(ex,ey)) {
-                b.setSwitchTime(55);
+                maxTime = 55;
                 setNewScreen = true;
             }
             tutorial.draw(game.shape);

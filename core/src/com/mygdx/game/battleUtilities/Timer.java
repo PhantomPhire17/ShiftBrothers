@@ -7,7 +7,13 @@ import com.mygdx.game.KLabel;
 
 public class Timer implements Constants {
 
-    public Timer() {}
+    private int maxTime;
+    public Timer() {
+    }
+
+    public void setMaxTime(int maxTime) {
+        this.maxTime = maxTime;
+    }
 
     private int seconds;
     private boolean useFPS = false;
@@ -31,28 +37,32 @@ public class Timer implements Constants {
     }
 
     public void drawTimer(SpriteBatch batch) {
-        if (isStatic == true) frame++;
+        frame++;
         // seconds = harald.getSwitchTime() - frame/30;
-        if (b.gameHasStarted() == true) {
-            seconds = b.getSwitchTime();
+        if (game.b.gameHasStarted() == true) {
+            seconds = maxTime;
         } else {
-            seconds =  b.getCurrentSwitchTime();
+            seconds =  game.b.getCurrentSwitchTime();
         }
         timeLabel = new KLabel("" + seconds);
-        if (b.timeIsRandom()==false) {
+        if (game.b.timeIsRandom()==false) {
             timeLabel.drawLabel("" + seconds, Gdx.graphics.getWidth()/2, CLOCK_Y, batch); }
         else {
             timeLabel.drawLabel("?", Gdx.graphics.getWidth()/2, CLOCK_Y, batch);
         }
-        if (frame%30 == 0) {
-            if (b.gameHasStarted() == true) { b.setNewGame(false); }
-            b.setCurrentSwitchTime(b.getSwitchTime() - frame/30);
+        if (frame%FPS == 0) {
+            if (game.b.gameHasStarted() == true) { game.b.setNewGame(false); }
+            game.b.setCurrentSwitchTime(maxTime - frame/FPS);
         }
-        if (seconds == -1) {
+        if (seconds < 0) {
             timeOver = true;
             frame = 0;
-            b.setCurrentSwitchTime(b.getSwitchTime());
+            game.b.setCurrentSwitchTime(maxTime);
         }
+    }
+
+    public void changeTime(int time) {
+        frame = frame + time * FPS;
     }
 
     boolean isStatic = false;
